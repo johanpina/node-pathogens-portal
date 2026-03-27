@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+.next
+.env
+.env.*
+_hugo_backup
+themes
+layouts
+static/admin
+docs
+content
+data
+hugo.yaml
+*.md
+!README.md

@@ -1,0 +1,594 @@
+/* =============================================
+   Portal de Patógenos Chile — Global Styles
+   Migrated from node-pathogens-portal-theme
+   ============================================= */
+
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap");
+
+/* ─── CSS Variables ─── */
+:root {
+  --portal-primary: #295986;
+  --portal-dark-blue: #193f90;
+  --portal-link: #4770b1;
+  --portal-teal: #37ae94;
+  --portal-highlight-green: rgba(55, 174, 148, 0.52);
+  --portal-breadcrumb-bg: rgba(46, 104, 165, 0.1);
+  --portal-card-bg: #f8f9fa;
+  --portal-text: #333;
+  --portal-muted: #6c757d;
+}
+
+/* ─── Base ─── */
+html,
+body {
+  font-family: "IBM Plex Sans", Arial, Helvetica, sans-serif;
+  color: var(--portal-text);
+  min-height: 100vh;
+}
+
+a {
+  color: var(--portal-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--portal-dark-blue);
+  text-decoration: underline;
+}
+
+/* ─── Navbar Top — blanco ─── */
+.portal-navbar-top {
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.portal-navbar-top .nav-link {
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 0.9rem;
+}
+
+.portal-navbar-top .nav-link:hover {
+  color: #000;
+}
+
+/* ─── Navbar Main — categorías ─── */
+.portal-navbar-main {
+  background: #fff;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.portal-navbar-main .nav-link {
+  color: #4770b1;
+  font-weight: 500;
+  font-size: 1.05rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.portal-navbar-main .nav-link:hover {
+  color: #193f90;
+  text-decoration: underline;
+}
+
+.portal-navbar-main .nav-link.active {
+  color: #193f90;
+  font-weight: 600;
+}
+
+/* ─── Navbar Mobile menu ─── */
+.portal-navbar-mobile {
+  background: #fff;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.portal-navbar-mobile .nav-link {
+  color: #4770b1;
+  font-size: 1rem;
+}
+
+.portal-navbar-mobile .nav-link:hover {
+  color: #193f90;
+}
+
+/* ─── Page Header / Banner ─── */
+.portal-banner {
+  background-color: var(--portal-teal);
+  background-size: cover;
+  background-position: center;
+  padding: 2.5rem 0;
+  min-height: 0;
+}
+
+.portal-banner.has-image {
+  background-blend-mode: multiply;
+  background-color: rgba(55, 174, 148, 0.85);
+}
+
+.portal-banner h1,
+.portal-banner .banner-caption {
+  color: #fff;
+}
+
+.portal-banner h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Breadcrumbs ─── */
+.portal-breadcrumb {
+  background-color: var(--portal-breadcrumb-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 0;
+}
+
+.portal-breadcrumb .breadcrumb-item a {
+  color: var(--portal-link);
+}
+
+/* ─── Buttons ─── */
+.btn-blue {
+  background-color: var(--portal-primary);
+  border-color: var(--portal-primary);
+  color: #fff;
+}
+
+.btn-blue:hover {
+  background-color: var(--portal-dark-blue);
+  border-color: var(--portal-dark-blue);
+  color: #fff;
+}
+
+/* ─── Section titles ─── */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 1rem;
+}
+
+/* ─── See-all link ─── */
+.see-all-link {
+  color: #4770b1;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.see-all-link:hover {
+  color: #193f90;
+}
+
+/* ─── Dashboard card — imagen + barra azul ─── */
+.dashboard-card {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 0 4px #55585a;
+}
+
+.dashboard-card .card-img-container {
+  height: 180px;
+  overflow: hidden;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-card .card-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dashboard-card .card-title-bar {
+  background-color: #295986;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.dashboard-card .card-body {
+  padding: 0.75rem;
+  background: #fff;
+}
+
+/* ─── Highlight card — borde azul ─── */
+.highlight-card {
+  border: 1px solid #295986;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.highlight-card:hover {
+  box-shadow: 0 0 3px #55585a;
+}
+
+.highlight-card .card-title-bar {
+  background-color: #295986;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.highlight-card .card-body {
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.highlight-card .card-img-container {
+  height: 160px;
+  overflow: hidden;
+}
+
+.highlight-card .card-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── News card (list pages) ─── */
+.portal-card {
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.2s;
+  height: 100%;
+}
+
+.portal-card:hover {
+  box-shadow: 0 4px 16px rgba(41, 89, 134, 0.15);
+}
+
+.portal-card .card-date {
+  font-size: 0.85rem;
+  color: var(--portal-muted);
+}
+
+.portal-card .card-img-top {
+  height: 180px;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* ─── Highlight card accent (legacy) ─── */
+.bg-highlight {
+  border-left: 4px solid var(--portal-primary);
+}
+
+/* ─── Topic Badge (legacy) ─── */
+.topic_badge {
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background-color: var(--portal-breadcrumb-bg);
+  color: var(--portal-primary);
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+  text-decoration: none;
+}
+
+.topic_badge:hover {
+  background-color: var(--portal-primary);
+  color: #fff;
+}
+
+/* ─── Sidebar boxes ─── */
+.sidebar-box {
+  background: #f2f2f2;
+  border: 1px solid #dee2e6;
+  border-radius: 3px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-box h5 {
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar-box .sidebar-desc {
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 0.75rem;
+}
+
+/* ─── Topic buttons — azul sólido ─── */
+.topic-btn {
+  display: inline-block;
+  background-color: #295986;
+  color: #fff !important;
+  padding: 0.3em 0.7em;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  margin: 0 8px 10px 0;
+  text-decoration: none !important;
+  box-shadow: 2px 2px 1px rgba(41, 89, 134, 0.4);
+}
+
+.topic-btn:hover {
+  background-color: #d4de27;
+  color: #1a1c1a !important;
+}
+
+/* ─── News sidebar item ─── */
+.news-sidebar-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.news-sidebar-item:last-child {
+  border-bottom: none;
+}
+
+.news-sidebar-item .item-date {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-bottom: 0.15rem;
+}
+
+.news-sidebar-item .item-title a {
+  color: #4770b1;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.news-sidebar-item .item-title a:hover {
+  color: #193f90;
+  text-decoration: underline;
+}
+
+.badge-new {
+  background-color: #ffc107;
+  color: #000;
+  font-size: 0.7rem;
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ─── Events sidebar ─── */
+.event-sidebar-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.event-sidebar-item:last-child {
+  border-bottom: none;
+}
+
+.event-date-small {
+  background: #55585a;
+  color: #fff;
+  border-radius: 3px;
+  text-align: center;
+  padding: 4px 8px;
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+.event-date-small .e-day {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.event-date-small .e-month {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+/* ─── Events (full card) ─── */
+.event-date-badge {
+  background-color: var(--portal-primary);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  min-width: 70px;
+}
+
+.event-date-badge .day {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.event-date-badge .month {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+/* ─── Footer ─── */
+.portal-footer {
+  background: #fff;
+  color: #333;
+  border-top: 1px solid #dee2e6;
+  margin-top: auto;
+}
+
+.portal-footer .footer-logos {
+  padding: 2rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.portal-footer .footer-links {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.portal-footer .footer-section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.portal-footer a {
+  color: #4770b1;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.portal-footer a:hover {
+  color: #193f90;
+  text-decoration: underline;
+}
+
+.portal-footer .footer-legal {
+  background: #f8f9fa;
+  padding: 1rem 0;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+/* ─── Article / Content ─── */
+.portal-article img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.25rem;
+}
+
+.portal-article h2,
+.portal-article h3,
+.portal-article h4 {
+  color: var(--portal-primary);
+  margin-top: 2rem;
+}
+
+/* ─── Admin layout ─── */
+.admin-sidebar {
+  min-height: 100vh;
+  background-color: var(--portal-primary);
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.admin-sidebar a {
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+
+.admin-sidebar a:hover,
+.admin-sidebar a.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left-color: rgba(255, 255, 255, 0.6);
+}
+
+.admin-sidebar .sidebar-section {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 1rem;
+}
+
+.admin-main {
+  flex: 1;
+  overflow-x: auto;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.admin-topbar {
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.75rem 1.5rem;
+}
+
+/* ─── TipTap editor ─── */
+.tiptap-editor {
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.tiptap-toolbar {
+  background: #f8f9fa;
+  border-bottom: 1px solid #ced4da;
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tiptap-toolbar button {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ced4da;
+  background: #fff;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.tiptap-toolbar button:hover,
+.tiptap-toolbar button.is-active {
+  background-color: var(--portal-primary);
+  color: #fff;
+  border-color: var(--portal-primary);
+}
+
+.tiptap-content {
+  padding: 1rem;
+  min-height: 300px;
+  outline: none;
+}
+
+.tiptap-content:focus {
+  outline: none;
+}
+
+/* ─── Utilities ─── */
+.text-portal-primary {
+  color: var(--portal-primary) !important;
+}
+
+.bg-portal-primary {
+  background-color: var(--portal-primary) !important;
+}
+
+.border-portal {
+  border-color: var(--portal-primary) !important;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .portal-banner h1 {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+}

@@ -1,0 +1,123 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(EDITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model News {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  date          DateTime
+  summary       String
+  banner        String?
+  bannerLarge   String?
+  bannerCaption String?
+  content       String   @db.Text
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Highlight {
+  id            String           @id @default(cuid())
+  title         String
+  slug          String           @unique
+  date          DateTime
+  summary       String
+  banner        String?
+  bannerLarge   String?
+  bannerCaption String?
+  content       String           @db.Text
+  published     Boolean          @default(false)
+  tags          String[]
+  topics        HighlightTopic[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model Topic {
+  id            String           @id @default(cuid())
+  name          String
+  slug          String           @unique
+  description   String?
+  banner        String?
+  bannerCaption String?
+  menuOrder     Int              @default(0)
+  highlights    HighlightTopic[]
+  dashboards    DashboardTopic[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model HighlightTopic {
+  highlight   Highlight @relation(fields: [highlightId], references: [id], onDelete: Cascade)
+  highlightId String
+  topic       Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     String
+
+  @@id([highlightId, topicId])
+}
+
+model Dashboard {
+  id          String           @id @default(cuid())
+  title       String
+  slug        String           @unique
+  description String?
+  banner      String?
+  redirectUrl String?
+  content     String?          @db.Text
+  published   Boolean          @default(false)
+  topics      DashboardTopic[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model DashboardTopic {
+  dashboard   Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  dashboardId String
+  topic       Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     String
+
+  @@id([dashboardId, topicId])
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  type        String    @default("Event")
+  dateStart   DateTime
+  timeStart   String?
+  dateEnd     DateTime?
+  timeEnd     String?
+  venue       String?
+  organisers  String?
+  eventUrl    String
+  description String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Setting {
+  key   String @id
+  value String @db.Text
+}

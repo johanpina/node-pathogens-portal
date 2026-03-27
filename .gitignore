@@ -1,21 +1,30 @@
-# Hugo default output directory
-/public
+# deps
+/node_modules
+/.pnp
+.pnp.*
 
-# more Hugo stuff
+# next
+/.next/
+/out/
+
+# env
+.env
+.env*.local
+
+# debug
+npm-debug.log*
+
+# OS
+.DS_Store
+*.pem
+
+# misc
+*.tsbuildinfo
+next-env.d.ts
+
+# Hugo artifacts (backup reference)
 .hugo_build.lock
 
-# OSX
-.DS_Store
-__pycache__
-
-# backups
-*~
-\#*\#
-
-# Node modules and npm cache directory
-node_modules/
-.npm/
-
-# Visual Studio Code
-.vscode
-*.code-workspace
+# uploads (docker volume)
+/public/uploads/*
+!/public/uploads/.gitkeep

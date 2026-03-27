@@ -1,47 +1,43 @@
-# Should be replaced with real one during implementation
-baseURL: "https://pathogensportal.node/"
-title: "Node Pathogens Portal"
+baseURL: "https://pathogens.cl/"
+title: "Portal de Patógenos Chile"
 theme: "node-pathogens-portal-theme"
 
 # page with date in future will be included in the build
 # buildFuture: true
 
-# default only english language, add more languages here if desired
 languages:
+  es:
+    languageName: Español
+    languageCode: es
   en:
     languageName: English
     languageCode: en
 
-# some parameters that can be used across site, such variable can be defined here than in front matter
 params:
-  title: "Node Pathogens Portal"
-  description: "Node Pathogens Portal provides information about available datasets, resources, tools, and services related to pandemic preparedness."
-  # images mentioned below are used for preview while sharing the URL. Example if you post in twitter, etc
+  title: "Portal de Patógenos Chile"
+  description: "El Portal de Patógenos Chile provee información sobre datos, recursos, herramientas y servicios relacionados con la preparación ante pandemias."
   images:
     - /img/pathogens_logo.svg
-  # local node info, logo will be displayed above pathogens logo
-  # given 'node_country' is an example, change the value to actual country
   portal_logo: "/img/pathogens_logo.svg"
   node_logo: "/img/example_logo.png"
-  node_url: "https://example.com/"
-  node_country: "Sweden"
-  # social media accounts URL to display in footer if desired
+  node_url: "https://pathogens.cl/"
+  node_country: "Chile"
   social_media:
     show_in_footer: true
     twitter_url: "https://x.com/"
     linkedin_url: "https://www.linkedin.com/"
-    contact_email: "mail@example.com"
-  # Url to github repository, node should keep the URL of their fork
-  git_repository: "https://github.com/ScilifelabDataCentre/node-pathogens-portal"
-  # Publications related configuration
+    contact_email: "contacto@pathogens.cl"
+  git_repository: "https://github.com/johanpina/node-pathogens-portal"
   publications:
-    country: "Sweden"
-    # It is important to use "" (double quotes) within the query string
+    country: "Chile"
     query_list:
       covid-19: 'ABSTRACT:("sars-cov-2" OR "covid-19")'
       influenza: 'ABSTRACT:"influenza"'
-    # Optional setting
+      mpox: 'ABSTRACT:"mpox" OR ABSTRACT:"monkeypox"'
     category_display: "list"
+  # Analytics: set umami_website_id after deploying Umami (see docs/analytics.md)
+  umami_website_id: ""
+  umami_src: ""
 
 taxonomies:
   highlights_topic: highlights_topics
@@ -51,8 +47,6 @@ permalinks:
   highlights_topics: "/highlights/topics/:slug/"
   dashboards_topics: "/dashboards/topics/:slug/"
 
-# The following setting is to render HTML content in a markdown file.
-# Can be set to true only if you have complete control over the content
 markup:
   goldmark:
     renderer:

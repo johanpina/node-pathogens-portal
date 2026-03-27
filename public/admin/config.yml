@@ -1,0 +1,166 @@
+# Decap CMS configuration for Portal de Patógenos Chile
+# Docs: https://decapcms.org/docs/
+#
+# LOCAL DEVELOPMENT:
+#   1. npm install -g decap-server
+#   2. decap-server   (runs on :8081)
+#   3. Uncomment the proxy backend below and comment the github backend
+#   4. hugo serve     (runs on :1313)
+#   5. Open http://localhost:1313/admin/
+
+# ---------------------------------------------------------------------------
+# Backend
+# ---------------------------------------------------------------------------
+backend:
+  name: github
+  repo: johanpina/node-pathogens-portal
+  branch: main
+  # --- Local development ---
+  # name: proxy
+  # proxy_url: http://localhost:8081/api/v1
+
+# Editorial workflow: draft → in review → published
+publish_mode: editorial_workflow
+
+# Media
+media_folder: "static/uploads"
+public_folder: "/uploads"
+
+# ---------------------------------------------------------------------------
+# Collections
+# ---------------------------------------------------------------------------
+collections:
+
+  # ------ Noticias ---------------------------------------------------------
+  - name: "news"
+    label: "Noticias"
+    label_singular: "Noticia"
+    folder: "content/news"
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - label: "Fecha"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "DD/MM/YYYY"
+        time_format: false
+      - { label: "Resumen", name: "summary", widget: "text" }
+      - label: "Imagen banner"
+        name: "banner"
+        widget: "image"
+        required: false
+        media_folder: "/static/news/banners"
+        public_folder: "/news/banners"
+      - label: "Banner grande"
+        name: "banner_large"
+        widget: "image"
+        required: false
+        media_folder: "/static/news/banners"
+        public_folder: "/news/banners"
+      - { label: "Pie de foto del banner", name: "banner_caption", widget: "string", required: false }
+      - { label: "Contenido", name: "body", widget: "markdown" }
+
+  # ------ Highlights -------------------------------------------------------
+  - name: "highlights"
+    label: "Highlights"
+    label_singular: "Highlight"
+    folder: "content/highlights"
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - label: "Fecha"
+        name: "date"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "DD/MM/YYYY"
+        time_format: false
+      - { label: "Resumen", name: "summary", widget: "text" }
+      - label: "Imagen banner"
+        name: "banner"
+        widget: "image"
+        required: false
+        media_folder: "/static/highlights/banners"
+        public_folder: "/highlights/banners"
+      - label: "Banner grande"
+        name: "banner_large"
+        widget: "image"
+        required: false
+        media_folder: "/static/highlights/banners"
+        public_folder: "/highlights/banners"
+      - { label: "Pie de foto del banner", name: "banner_caption", widget: "string", required: false }
+      - label: "Tópicos"
+        name: "highlights_topics"
+        widget: "list"
+        required: false
+        hint: "Ej: covid-19, influenza, mpox"
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Contenido", name: "body", widget: "markdown" }
+
+  # ------ Dashboards -------------------------------------------------------
+  - name: "dashboards"
+    label: "Dashboards"
+    label_singular: "Dashboard"
+    folder: "content/dashboards"
+    create: true
+    delete: true
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Descripción", name: "description", widget: "text", required: false }
+      - label: "Imagen banner"
+        name: "banner"
+        widget: "image"
+        required: false
+        media_folder: "/static/dashboards/banners"
+        public_folder: "/dashboards/banners"
+      - label: "URL externa (redireccionamiento)"
+        name: "redirect_url"
+        widget: "string"
+        required: false
+        hint: "Si se completa, el usuario es redirigido automáticamente a esta URL."
+      - label: "Tópicos"
+        name: "dashboards_topics"
+        widget: "list"
+        required: false
+      - { label: "Contenido", name: "body", widget: "markdown", required: false }
+
+  # ------ Eventos (data/events.json) ---------------------------------------
+  - name: "events"
+    label: "Eventos"
+    files:
+      - label: "Lista de eventos"
+        name: "events_list"
+        file: "data/events.json"
+        fields:
+          - label: "Eventos"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.title}} — {{fields.date_start}}"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - label: "Tipo"
+                name: "type"
+                widget: "select"
+                options: ["Event", "Training", "Workshop", "Conference", "Webinar", "Seminar"]
+              - label: "Fecha inicio"
+                name: "date_start"
+                widget: "datetime"
+                format: "YYYY-MM-DD"
+                date_format: "DD/MM/YYYY"
+                time_format: false
+              - { label: "Hora inicio", name: "time_start", widget: "string", default: "09:00" }
+              - label: "Fecha fin"
+                name: "date_end"
+                widget: "datetime"
+                format: "YYYY-MM-DD"
+                date_format: "DD/MM/YYYY"
+                time_format: false
+              - { label: "Hora fin", name: "time_end", widget: "string", default: "17:00" }
+              - { label: "Lugar", name: "venue", widget: "string" }
+              - { label: "Organizadores", name: "organisers", widget: "string" }
+              - { label: "URL del evento", name: "event_url", widget: "string" }
+              - { label: "Descripción", name: "description", widget: "text" }

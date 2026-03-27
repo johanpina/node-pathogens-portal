@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: patogens_app
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://patogens:patogens@db:5432/patogens
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/public/uploads
+    restart: unless-stopped
+    networks:
+      - patogens_net
+
+  db:
+    image: postgres:16-alpine
+    container_name: patogens_db
+    ports:
+      - "5432:5432"
+    env_file: .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-patogens}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-patogens}
+      - POSTGRES_DB=${POSTGRES_DB:-patogens}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-patogens}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - patogens_net
+
+volumes:
+  pgdata:
+    name: patogens_pgdata
+  uploads:
+    name: patogens_uploads
+
+networks:
+  patogens_net:
+    name: patogens_net
