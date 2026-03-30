@@ -45,8 +45,8 @@ export default function Navbar({ lang }: { lang: Lang }) {
 
           {/* Institution logo */}
           <img
-            src="/img/example_logo.png"
-            alt="Institution"
+            src="/images/logos/logo_uchile.png"
+            alt="Universidad de Chile"
             className="d-none d-md-block"
             style={{ height: 45, width: "auto" }}
           />

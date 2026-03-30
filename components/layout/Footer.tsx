@@ -24,14 +24,24 @@ export default async function Footer() {
       <div className="footer-logos">
         <div className="container d-flex justify-content-center align-items-center gap-5 flex-wrap">
           <img
-            src="/img/example_logo.png"
-            alt="Institution Chile"
+            src="/images/logos/logo_uga.png"
+            alt="UGA – Unidad de Genómica Avanzada"
             style={{ height: 60, width: "auto" }}
           />
           <img
-            src="/img/pdn_logo.png"
-            alt="Pathogen Data Network"
-            style={{ height: 55, width: "auto" }}
+            src="/images/logos/logo_accdis.png"
+            alt="ACCDiS – Advanced Center for Chronic Diseases"
+            style={{ height: 60, width: "auto" }}
+          />
+          <img
+            src="/images/logos/logo_uchile.png"
+            alt="Universidad de Chile"
+            style={{ height: 60, width: "auto" }}
+          />
+          <img
+            src="/images/logos/logo_lib.png"
+            alt="LIB – Laboratory of Integrative Bioinformatics"
+            style={{ height: 60, width: "auto" }}
           />
         </div>
       </div>
