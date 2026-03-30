@@ -34,13 +34,13 @@ export default async function Footer() {
             style={{ height: 60, width: "auto" }}
           />
           <img
-            src="/images/logos/logo_uchile.png"
-            alt="Universidad de Chile"
+            src="/images/logos/logo_facultad.png"
+            alt="Facultad de Medicina – Universidad de Chile"
             style={{ height: 60, width: "auto" }}
           />
           <img
-            src="/images/logos/logo_lib.png"
-            alt="LIB – Laboratory of Integrative Bioinformatics"
+            src="/images/logos/logo_chair.png"
+            alt="CHAIR – Center for HIV/AIDS Integral Research"
             style={{ height: 60, width: "auto" }}
           />
         </div>
