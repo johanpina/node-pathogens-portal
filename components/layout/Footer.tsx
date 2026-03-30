@@ -38,6 +38,11 @@ export default async function Footer() {
             alt="CHAIR – Center for HIV/AIDS Integral Research"
             style={{ height: 60, width: "auto" }}
           />
+          <img
+            src="/images/logos/logo_facicqf.png"
+            alt="Facultad de Ciencias Químicas y Farmacéuticas – Universidad de Chile"
+            style={{ height: 60, width: "auto" }}
+          />
         </div>
       </div>
 
