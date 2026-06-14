@@ -69,6 +69,14 @@ export const translations = {
       dashboardsLabel: "Dashboards",
       empty: "No content for this topic yet.",
     },
+    datasets: {
+      title: "Available datasets",
+      regionTitle: "Region-based accessible data",
+      resultsFor: "Results for",
+      intro:
+        "is developed and hosted by EMBL-EBI as a public data repository for infectious diseases and epidemics. The links below run queries for different kinds of data — sequences, samples, analyses and outbreaks — filtered for Chile. Each one opens the corresponding results in the Central Pathogens Portal.",
+      viewIn: "View results in",
+    },
     surveillance: {
       navLabel: "Dashboards",
       title: "Dashboards",
@@ -171,6 +179,14 @@ export const translations = {
       highlightsNav: "Destacados",
       dashboardsLabel: "Dashboards",
       empty: "No hay contenido para este tópico aún.",
+    },
+    datasets: {
+      title: "Datasets disponibles",
+      regionTitle: "Datos accesibles por región",
+      resultsFor: "Resultados para",
+      intro:
+        "es desarrollado y alojado por EMBL-EBI como repositorio público de datos de enfermedades infecciosas y epidemias. Los enlaces de abajo ejecutan consultas de distintos tipos de datos —secuencias, muestras, análisis y brotes— filtradas para Chile. Cada uno abre los resultados correspondientes en el Central Pathogens Portal.",
+      viewIn: "Ver resultados en",
     },
     surveillance: {
       navLabel: "Tableros",
