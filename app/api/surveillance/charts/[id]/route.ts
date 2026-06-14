@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAuth, isNextResponse } from "@/lib/apiAuth";
-import { validateChartInput } from "../route";
+import { validateChartInput } from "@/lib/surveillance/chartInput";
 
 export async function GET(
   request: NextRequest,

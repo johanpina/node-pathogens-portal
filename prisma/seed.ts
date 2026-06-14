@@ -1,5 +1,7 @@
 import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { seedPathogens } from "./seedPathogens";
 import { seedCharts } from "./seedCharts";
 
@@ -33,6 +35,10 @@ async function main() {
     { key: "github_url", value: "" },
     { key: "umami_src", value: "" },
     { key: "umami_website_id", value: "" },
+    {
+      key: "weekly_prompt",
+      value: readFileSync(join(process.cwd(), "prisma", "data", "WEEKLY_PROMPT_ES.md"), "utf-8"),
+    },
   ];
   for (const s of defaultSettings) {
     await prisma.setting.upsert({

@@ -12,6 +12,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.1",
     "@prisma/client": "^5.22.0",
     "@tiptap/core": "^2.11.5",
     "@tiptap/extension-image": "^2.11.5",

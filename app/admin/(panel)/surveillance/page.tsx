@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+import GenerateDraftButton from "@/components/admin/GenerateDraftButton";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,8 @@ export default async function AdminSurveillancePage() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="h3 mb-0">Vigilancia de patógenos</h1>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 align-items-center flex-wrap">
+          <GenerateDraftButton />
           <Link href="/admin/surveillance/charts" className="btn btn-outline-secondary">
             <i className="bi bi-graph-up me-1"></i> Gráficos
           </Link>
