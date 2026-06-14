@@ -24,6 +24,7 @@ next-env.d.ts
 
 # Hugo artifacts (backup reference)
 .hugo_build.lock
+/_hugo_backup/
 
 # uploads (docker volume)
 /public/uploads/*

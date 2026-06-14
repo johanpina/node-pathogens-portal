@@ -12,6 +12,7 @@ export default function Navbar({ lang }: { lang: Lang }) {
   const t = getT(lang);
 
   const mainNavLinks = [
+    { href: "/surveillance", label: t.surveillance.navLabel },
     { href: "/dashboards", label: t.nav.dataDashboards },
     { href: "/highlights", label: t.nav.dataHighlights },
     { href: "/datasets", label: t.nav.datasets },

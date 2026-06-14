@@ -65,6 +65,7 @@ model Topic {
   menuOrder     Int              @default(0)
   highlights    HighlightTopic[]
   dashboards    DashboardTopic[]
+  pathogens     Pathogen[]
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 }
@@ -120,4 +121,167 @@ model Event {
 model Setting {
   key   String @id
   value String @db.Text
+}
+
+// ── Pathogen surveillance (ported from Javier's weekly-update pipeline) ──
+
+enum PathogenStatus {
+  endemic
+  alert
+  monitoring
+  contained
+}
+
+enum BundleStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BundleSource {
+  MANUAL_IMPORT
+  AI_GENERATED
+}
+
+enum NewsSeverity {
+  high
+  medium
+  info
+}
+
+/// One of the 8 monitored pathogens. `id` is the closed-list slug
+/// (influenza, rsv, covid19, hantavirus, dengue, mpox, salmonella, amr).
+model Pathogen {
+  id            String           @id
+  nameEs        String
+  nameEn        String
+  icon          String
+  color         String
+  status        PathogenStatus
+  statusLabelEs String
+  statusLabelEn String
+  summaryEs     String           @db.Text
+  summaryEn     String           @db.Text
+  cardSources   String[]
+  notesEs       String?          @db.Text
+  notesEn       String?          @db.Text
+  epiWeek       String?
+  page          String?
+  topic         Topic?           @relation(fields: [topicId], references: [id])
+  topicId       String?
+  order         Int              @default(0)
+  stats         PathogenStat[]
+  sources       PathogenSource[]
+  charts        PathogenChart[]
+  updatedAt     DateTime         @updatedAt
+  createdAt     DateTime         @default(now())
+}
+
+/// Card stats (3 per pathogen) and detail headline stats (N per pathogen).
+model PathogenStat {
+  id         String   @id @default(cuid())
+  pathogen   Pathogen @relation(fields: [pathogenId], references: [id], onDelete: Cascade)
+  pathogenId String
+  kind       String // "card" | "headline"
+  order      Int      @default(0)
+  statId     String? // optional id from headline_stats for cross-week mapping
+  value      String
+  labelEs    String
+  labelEn    String
+}
+
+/// Detailed sources (with traceable URL) from each pathogen detail file.
+model PathogenSource {
+  id          String   @id @default(cuid())
+  pathogen    Pathogen @relation(fields: [pathogenId], references: [id], onDelete: Cascade)
+  pathogenId  String
+  sourceId    String
+  name        String
+  url         String?
+  retrievedAt String?
+  order       Int      @default(0)
+}
+
+/// Live singleton with the current epidemiological week + home alert banner.
+model EpiMeta {
+  id                String   @id @default("current")
+  schemaVersion     Int      @default(1)
+  epiWeek           String
+  ew                String
+  year              Int
+  homeAlertEs       String   @db.Text
+  homeAlertEn       String   @db.Text
+  regionalLastCheck String?
+  regionalSource    String?
+  updatedAt         DateTime @updatedAt
+}
+
+/// Big stats shown on the home banner.
+model BannerStat {
+  id      String @id
+  order   Int    @default(0)
+  value   String
+  labelEs String
+  labelEn String
+}
+
+/// Surveillance highlights (metric form). Distinct from the CMS `Highlight`.
+model SurveillanceHighlight {
+  id           String @id
+  order        Int    @default(0)
+  titleEs      String
+  titleEn      String
+  metricValue  String
+  metricLabelEs String
+  metricLabelEn String
+  link         String
+}
+
+/// Surveillance news feed (bilingual, with severity). Distinct from `News`.
+model SurveillanceNews {
+  id        String       @id
+  order     Int          @default(0)
+  isoDate   DateTime
+  dateLabel String
+  titleEs   String
+  titleEn   String
+  link      String
+  tags      String[]
+  severity  NewsSeverity @default(info)
+  summaryEs String       @db.Text
+  summaryEn String       @db.Text
+}
+
+/// A weekly import (manual or AI). The validated bundle JSON lives in
+/// `parsedJson` for trivial diff/rollback. Publishing applies it to the
+/// live tables above in a single transaction.
+model PathogenBundle {
+  id               String       @id @default(cuid())
+  status           BundleStatus @default(DRAFT)
+  source           BundleSource @default(MANUAL_IMPORT)
+  epiWeek          String?
+  rawMarkdown      String?      @db.Text
+  parsedJson       Json
+  validationErrors Json?
+  createdById      String?
+  publishedAt      DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+/// Historical chart series per pathogen (Milestone 1.5). `config` mirrors
+/// the Chart.js data/options object.
+model PathogenChart {
+  id          String   @id @default(cuid())
+  pathogen    Pathogen @relation(fields: [pathogenId], references: [id], onDelete: Cascade)
+  pathogenId  String
+  order       Int      @default(0)
+  kind        String // line | bar | doughnut | pie
+  titleEs     String
+  titleEn     String
+  config      Json
+  narrativeEs String?  @db.Text
+  narrativeEn String?  @db.Text
+  updatedAt   DateTime @updatedAt
 }

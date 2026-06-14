@@ -10,6 +10,7 @@ const navItems = [
   { href: "/admin/dashboards", label: "Dashboards", icon: "bi-bar-chart" },
   { href: "/admin/topics", label: "Tópicos", icon: "bi-tags" },
   { href: "/admin/events", label: "Eventos", icon: "bi-calendar-event" },
+  { href: "/admin/surveillance", label: "Vigilancia", icon: "bi-clipboard-pulse" },
   { href: "/admin/users", label: "Usuarios", icon: "bi-people" },
   { href: "/admin/settings", label: "Configuración", icon: "bi-gear" },
 ];
@@ -40,7 +41,7 @@ export default function AdminLayout({ children, userName }: AdminLayoutProps) {
 
         <nav className="flex-grow-1 py-2">
           <div className="sidebar-section">Contenido</div>
-          {navItems.slice(0, 6).map((item) => (
+          {navItems.slice(0, 7).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -59,7 +60,7 @@ export default function AdminLayout({ children, userName }: AdminLayoutProps) {
             </Link>
           ))}
           <div className="sidebar-section">Sistema</div>
-          {navItems.slice(6).map((item) => (
+          {navItems.slice(7).map((item) => (
             <Link
               key={item.href}
               href={item.href}

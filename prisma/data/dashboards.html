@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="google" content="notranslate">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title data-page-title-es="Tableros de Datos" data-page-title-en="Data Dashboards">Tableros de Datos | Portal de Patógenos Chile</title>
+  <link rel="icon" href="img/pathogens_logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap"/></noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" crossorigin="anonymous"/>
+  <link rel="stylesheet" href="patogenos.css"/>
+  <style>
+    .chart-wrap   { position:relative; height:260px; width:100%; }
+    .chart-wrap-sm{ position:relative; height:220px; width:100%; }
+    .dash-panel{border:1px solid #dee2e6;border-radius:6px;overflow:hidden;margin-bottom:2.5rem;background:#fff;box-shadow:0 2px 12px rgba(41,89,134,.07);}
+    .dash-panel-head{padding:.85rem 1.25rem;border-bottom:1px solid #dee2e6;display:flex;align-items:center;gap:.75rem;background:#fafbfe;}
+    .dash-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+    .dash-panel-head h2{font-size:1rem;font-weight:700;margin:0;}
+    .dash-sub{margin-left:auto;font-size:.77rem;color:#6c757d;white-space:nowrap;}
+    .dash-alert{padding:.55rem 1.25rem;font-size:.82rem;display:flex;align-items:flex-start;gap:.5rem;}
+    .dash-alert.info{background:#eaf3fd;border-left:4px solid #4770b1;color:#1a4a80;}
+    .dash-alert.warning{background:#fffbeb;border-left:4px solid #f59e0b;color:#78450a;}
+    .dash-alert.danger{background:#fef2f2;border-left:4px solid #dc2626;color:#8b1513;}
+    .dash-body{padding:1.25rem 1.4rem;}
+    .kpi-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+    .kpi-box{flex:1;min-width:100px;background:#f0f4fa;border:1px solid #cdd9ea;border-radius:6px;padding:.7rem .8rem;text-align:center;}
+    .kpi-box .kv{font-size:1.35rem;font-weight:800;}
+    .kpi-box .kl{font-size:.67rem;color:#6c757d;margin-top:2px;text-transform:uppercase;letter-spacing:.04em;line-height:1.3;}
+    .sect-label{font-size:.74rem;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:.5px;margin:1.4rem 0 .5rem;}
+    table.dt{width:100%;border-collapse:collapse;font-size:.82rem;}
+    table.dt th{background:#f0f4fa;padding:.48rem .9rem;text-align:left;font-weight:600;color:#295986;border-bottom:2px solid #dee2e6;}
+    table.dt td{padding:.44rem .9rem;border-bottom:1px solid #dee2e6;}
+    table.dt tr:last-child td{border-bottom:none;}
+    table.dt tr:hover td{background:#f8fafd;}
+    .pill{display:inline-block;padding:.12rem .5rem;border-radius:20px;font-size:.7rem;font-weight:700;}
+    .pill-red{background:#fef2f2;color:#b91c1c;} .pill-orange{background:#fff7ed;color:#c2410c;}
+    .pill-green{background:#f0fdf4;color:#15803d;} .pill-blue{background:#eff6ff;color:#1d4ed8;}
+    .anav{background:#f0f4fa;border-bottom:1px solid #dee2e6;padding:.5rem 0;overflow-x:auto;}
+    .anav .container{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .anav a{display:inline-flex;align-items:center;gap:.35rem;padding:.35rem .75rem;border-radius:4px;font-size:.82rem;font-weight:600;text-decoration:none;border:1px solid transparent;color:#295986;transition:background .15s;}
+    .anav a:hover{background:#fff;border-color:#cdd9ea;}
+  </style>
+  <script>
+    /* SW kill-switch (Phase 8): if a stale service worker from a previous
+       localhost:* project is registered, it can intercept fetches and serve
+       a blank page. This unregisters any SW on this origin + clears caches.
+       Safe to keep: this site does not use a service worker. */
+    (function () {
+      try {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) { r.unregister(); });
+          }).catch(function () {});
+        }
+        if (typeof caches !== 'undefined' && caches.keys) {
+          caches.keys().then(function (names) {
+            names.forEach(function (n) { caches.delete(n); });
+          }).catch(function () {});
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body translate="no" class="lang-es">
+<a class="skip-link" href="#main" data-es="Saltar al contenido principal" data-en="Skip to main content">Saltar al contenido principal</a>
+
+<div class="d-flex flex-column min-vh-100">
+<header>
+    <div class="portal-navbar-top">
+      <div class="container d-flex align-items-center py-2 gap-3">
+        <div class="d-flex align-items-center gap-1">
+          <button class="lang-btn active" data-lang="es" type="button" aria-pressed="true" aria-label="Cambiar idioma a Espanol" title="Espanol">ES</button>
+          <button class="lang-btn" data-lang="en" type="button" aria-pressed="false" aria-label="Cambiar idioma a English" title="English">EN</button>
+        </div>
+        <a class="d-flex align-items-center text-decoration-none" href="index.html">
+          <img src="img/pathogens_logo.svg" alt="Portal de Patógenos Chile" style="height:48px;width:auto"/>
+        </a>
+        <img src="images/logos/logo_uchile.png" alt="U. Chile" class="d-none d-md-block" style="height:42px;width:auto"/>
+        <nav class="ms-auto d-none d-lg-flex align-items-center gap-3" aria-label="Utilitario">
+          <a class="nav-link py-0" href="about.html" data-es="Acerca de" data-en="About">Acerca de</a>
+          <a class="nav-link py-0" href="contact.html" data-es="Contacto" data-en="Contact">Contacto</a>
+        </nav>
+      </div>
+    </div>
+    <div class="portal-navbar-main d-none d-lg-block">
+      <div class="container">
+        <nav class="d-flex gap-4 py-1" aria-label="Principal">
+          <a class="nav-link px-0 active" href="dashboards.html" data-es="Tableros de Datos" data-en="Data Dashboards">Tableros de Datos</a>
+          <a class="nav-link px-0" href="highlights.html" data-es="Destacados" data-en="Highlights">Destacados</a>
+          <a class="nav-link px-0" href="datasets.html" data-es="Datasets" data-en="Datasets">Datasets</a>
+          <a class="nav-link px-0" href="topics.html" data-es="Temas" data-en="Topics">Temas</a>
+          <a class="nav-link px-0" href="publications.html" data-es="Publicaciones" data-en="Publications">Publicaciones</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="flex-grow-1" id="main" tabindex="-1">
+    <div class="portal-banner">
+      <div class="container py-2">
+        <h1 class="mb-1" data-es="Tableros de Vigilancia Epidemiológica" data-en="Epidemiological Surveillance Dashboards">Tableros de Vigilancia Epidemiológica</h1>
+        <p class="text-white mb-0" style="font-size:.9rem;opacity:.88"
+           data-bind-template-es="Datos oficiales MINSAL · ISP · Semana Epidemiológica {ew}, {year} — 6 patógenos bajo vigilancia activa"
+           data-bind-template-en="Official MINSAL · ISP data · Epidemiological Week {ew}, {year} — 6 pathogens under active surveillance"
+           data-bind-template-from="meta">
+          Datos oficiales MINSAL · ISP · Semana Epidemiológica 22, 2026 — 6 patógenos bajo vigilancia activa
+        </p>
+      </div>
+    </div>
+    <div class="portal-breadcrumb">
+      <div class="container">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small">
+          <li class="breadcrumb-item"><a href="index.html" data-es="Inicio" data-en="Home">Inicio</a></li>
+          <li class="breadcrumb-item active">Tableros</li>
+        </ol></nav>
+      </div>
+    </div>
+    <div class="anav">
+      <div class="container">
+        <a href="#influenza"><i class="bi bi-thermometer-half" style="color:#2563eb"></i> Influenza</a>
+        <a href="#hantavirus"><i class="bi bi-heart-pulse" style="color:#dc2626"></i> Hantavirus</a>
+        <a href="#mpox"><i class="bi bi-shield-exclamation" style="color:#7c3aed"></i> Mpox</a>
+        <a href="#dengue"><i class="bi bi-bug" style="color:#d97706"></i> Dengue</a>
+        <a href="#covid"><i class="bi bi-virus" style="color:#0891b2"></i> COVID-19</a>
+        <a href="#rsv"><i class="bi bi-lungs" style="color:#16a34a"></i> VRS</a>
+      </div>
+    </div>
+    <div class="container py-4">
+
+      <div class="dash-panel" id="influenza">
+        <div class="dash-panel-head">
+          <div class="dash-dot" style="background:#2563eb"></div>
+          <h2 data-es="Influenza — Vigilancia de Virus Respiratorios" data-en="Influenza — Respiratory Virus Surveillance">Influenza — Vigilancia de Virus Respiratorios</h2>
+          <span class="dash-sub">ISP / MINSAL · SE 1–46 2025 &amp; SE 1–16 2026</span>
+        </div>
+        <div class="dash-alert info">ℹ️ Temporada 2026: Predominio de A(H3N2) sublínea K desde diciembre 2025. SE16 2026: 2,899 muestras, 1,080 positivas (37.3%).</div>
+        <div class="dash-body">
+          <div class="chile-situation mb-3">
+            <h6>🇨🇱 Situación en Chile</h6>
+            <p class="mb-0 small" data-es="Chile enfrenta anualmente entre mayo y agosto una temporada de influenza. En 2025, A(H1N1)pdm09 dominó con el 95.7% de los subtipos (pico 51.8% SE33). Para 2026, A(H3N2) sublínea K está desplazando al H1N1, con 37.3% positividad en SE16. Los ≥65 años concentran el 26.4% de positivos." data-en="Chile faces an annual influenza season May–August. In 2025, A(H1N1)pdm09 dominated at 95.7% (peak 51.8% EW33). For 2026, A(H3N2) K sub-lineage is displacing H1N1, with 37.3% positivity in EW16.">Chile enfrenta anualmente entre mayo y agosto una temporada de influenza. En 2025, A(H1N1)pdm09 dominó con el 95.7% de los subtipos (pico 51.8% SE33). Para 2026, A(H3N2) sublínea K está desplazando al H1N1, con 37.3% positividad en SE16. Los ≥65 años concentran el 26.4% de positivos.</p>
+          </div>
+          <div class="kpi-row"><div class="kpi-box"><div class="kv" style="color:#2563eb">40.6%</div><div class="kl">Positividad SE23 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#2563eb">51.8%</div><div class="kl">Pico positividad SE33</div></div>
+<div class="kpi-box"><div class="kv" style="color:#2563eb">1,192</div><div class="kl">Casos IRAG 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#2563eb">95.7%</div><div class="kl">A(H1N1) 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#2563eb">4.3%</div><div class="kl">A(H3N2) 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#2563eb">37.3%</div><div class="kl">Positividad SE16 2026</div></div></div>
+          <div class="row g-3 mb-3"><div class="col-12"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Positividad semanal — Influenza A vs. Total · SE 1–46 2025</h6><div class="chart-wrap-sm"><canvas id="fluLine"></canvas></div></div></div><div class="row g-3 mb-3">
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Subtipos Influenza A — 2025</h6><div class="chart-wrap"><canvas id="fluPie"></canvas></div></div>
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Virus respiratorios — % positivos SE23 2025</h6><div class="chart-wrap"><canvas id="fluBar"></canvas></div></div>
+      </div>
+          <p class="sect-label">Distribución por grupo etario — IRAG influenza 2025</p><div class="table-responsive"><table class="dt"><thead><tr><th>Grupo etario</th><th>% IRAG total</th><th>Riesgo clínico</th><th>Observación</th></tr></thead><tbody><tr><td>< 1 año</td><td>8%</td><td><span class="pill pill-orange">Alto</span></td><td>Mayor riesgo de complicaciones graves</td></tr><tr><td>1–4 años</td><td>12%</td><td><span class="pill pill-orange">Alto</span></td><td>Principal grupo en urgencias pediátricas</td></tr><tr><td>5–14 años</td><td>18%</td><td><span class="pill pill-blue">Mayor detección</span></td><td>Amplificadores; circulación escolar</td></tr><tr><td>15–64 años</td><td>37%</td><td><span class="pill pill-green">Moderado</span></td><td>Mayor volumen por tamaño poblacional</td></tr><tr><td>≥ 65 años</td><td>25%</td><td><span class="pill pill-red">Alta mortalidad</span></td><td>26.4% de los positivos en SE16 2026</td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div class="dash-panel" id="hantavirus">
+        <div class="dash-panel-head">
+          <div class="dash-dot" style="background:#dc2626"></div>
+          <h2 data-es="Hantavirus — Síndrome Pulmonar (SPH)" data-en="Hantavirus — Pulmonary Syndrome (HPS)">Hantavirus — Síndrome Pulmonar (SPH)</h2>
+          <span class="dash-sub">MINSAL · 2017–2026 (SE 1–17)</span>
+        </div>
+        <div class="dash-alert danger">🔴 <strong>Alerta epidemiológica 2026:</strong> Letalidad aumentó a 33% (13/39 fallecidos) respecto al 18% en 2025. Afecta 9 de 16 regiones.</div>
+        <div class="dash-body">
+          <div class="chile-situation mb-3">
+            <h6>🇨🇱 Situación en Chile</h6>
+            <p class="mb-0 small" data-es="Chile reporta 38–55 casos anuales de SPH. En 2026, la letalidad alcanzó el 33% en las primeras 17 semanas — la más alta desde 2018. Virus Andes (ANDV) es el único hantavirus con transmisión persona a persona documentada. Regiones más afectadas: La Araucanía, Los Lagos y Biobío. Reservorio principal: ratón de cola larga (Oligoryzomys longicaudatus)." data-en="Chile reports 38–55 annual HPS cases. In 2026, lethality reached 33% in the first 17 weeks — highest since 2018. Andes virus (ANDV) is the only hantavirus with documented person-to-person transmission. Most affected regions: La Araucanía, Los Lagos, Biobío.">Chile reporta 38–55 casos anuales de SPH. En 2026, la letalidad alcanzó el 33% en las primeras 17 semanas — la más alta desde 2018. Virus Andes (ANDV) es el único hantavirus con transmisión persona a persona documentada. Regiones más afectadas: La Araucanía, Los Lagos y Biobío. Reservorio principal: ratón de cola larga (Oligoryzomys longicaudatus).</p>
+          </div>
+          <div class="kpi-row"><div class="kpi-box"><div class="kv" style="color:#dc2626">39</div><div class="kl">Casos 2026 (SE1–17)</div></div>
+<div class="kpi-box"><div class="kv" style="color:#dc2626">13</div><div class="kl">Fallecidos 2026</div></div>
+<div class="kpi-box"><div class="kv" style="color:#dc2626">33%</div><div class="kl">Letalidad 2026</div></div>
+<div class="kpi-box"><div class="kv" style="color:#dc2626">44</div><div class="kl">Casos totales 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#dc2626">8</div><div class="kl">Fallecidos 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#dc2626">18%</div><div class="kl">Letalidad 2025</div></div></div>
+          <div class="row g-3 mb-3">
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Casos y fallecidos anuales · 2017–2026</h6><div class="chart-wrap"><canvas id="hantaBar"></canvas></div></div>
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Distribución regional · 2026</h6><div class="chart-wrap"><canvas id="hantaPie"></canvas></div></div>
+      </div><div class="row g-3 mb-3"><div class="col-12"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Tasa de letalidad histórica (%) · 2017–2026</h6><div class="chart-wrap-sm"><canvas id="hantaLetal"></canvas></div></div></div>
+          <p class="sect-label">Regiones con casos confirmados — 2026</p><div class="table-responsive"><table class="dt"><thead><tr><th>Región</th><th>Zona</th><th>Nivel de alerta</th></tr></thead><tbody><tr><td>La Araucanía</td><td>Sur</td><td><span class="pill pill-red">Alto riesgo</span></td></tr><tr><td>Los Lagos</td><td>Sur</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>Biobío</td><td>Sur-centro</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>Aysén</td><td>Sur austral</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>Maule</td><td>Centro</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>Metropolitana</td><td>Centro</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>O'Higgins</td><td>Centro</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>Ñuble</td><td>Centro-sur</td><td><span class="pill pill-orange">Alerta</span></td></tr><tr><td>Los Ríos</td><td>Sur</td><td><span class="pill pill-orange">Alerta</span></td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div class="dash-panel" id="mpox">
+        <div class="dash-panel-head">
+          <div class="dash-dot" style="background:#7c3aed"></div>
+          <h2 data-es="Mpox — Viruela Símica" data-en="Mpox — Monkeypox">Mpox — Viruela Símica</h2>
+          <span class="dash-sub">MINSAL · 2022–2025</span>
+        </div>
+        <div class="dash-alert info">📉 Reducción sostenida: de 1,402 casos en 2022 a 186 en 2025 (−87%). Vacunación MVA-BN activa: 33,494 dosis aplicadas de 92,400 adquiridas (USD 12M).</div>
+        <div class="dash-body">
+          <div class="chile-situation mb-3">
+            <h6>🇨🇱 Situación en Chile</h6>
+            <p class="mb-0 small" data-es="Chile detectó sus primeros casos en junio 2022 (clado IIb). Pico en agosto–septiembre 2022 (~350 casos/mes). La Región Metropolitana concentra el 81% de los casos. Tendencia: −87% desde 2022. Vacunación MVA-BN (Jynneos): 33,494 dosis de 92,400 adquiridas. En 2024, OMS re-declaró ESPII por clado Ib en África; Chile reforzó vigilancia en viajeros." data-en="Chile detected its first Mpox cases in June 2022 (clade IIb). Peak August–September 2022. Metropolitan Region: 81% of cases. Trend: −87% since 2022. MVA-BN vaccination: 33,494 of 92,400 acquired doses (USD 12M).">Chile detectó sus primeros casos en junio 2022 (clado IIb). Pico en agosto–septiembre 2022 (~350 casos/mes). La Región Metropolitana concentra el 81% de los casos. Tendencia: −87% desde 2022. Vacunación MVA-BN (Jynneos): 33,494 dosis de 92,400 adquiridas. En 2024, OMS re-declaró ESPII por clado Ib en África; Chile reforzó vigilancia en viajeros.</p>
+          </div>
+          <div class="kpi-row"><div class="kpi-box"><div class="kv" style="color:#7c3aed">186</div><div class="kl">Casos 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#7c3aed">300</div><div class="kl">Casos 2024 (est.)</div></div>
+<div class="kpi-box"><div class="kv" style="color:#7c3aed">1,402</div><div class="kl">Peak 2022</div></div>
+<div class="kpi-box"><div class="kv" style="color:#7c3aed">156</div><div class="kl">Hospitalizaciones 2022</div></div>
+<div class="kpi-box"><div class="kv" style="color:#7c3aed">2</div><div class="kl">Fallecidos acumulados</div></div>
+<div class="kpi-box"><div class="kv" style="color:#7c3aed">33,494</div><div class="kl">Dosis vacuna aplicadas</div></div></div>
+          <div class="row g-3 mb-3">
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Casos por año · 2022–2025</h6><div class="chart-wrap"><canvas id="mpoxBar"></canvas></div></div>
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Distribución regional acumulada</h6><div class="chart-wrap"><canvas id="mpoxPie"></canvas></div></div>
+      </div><div class="row g-3 mb-3"><div class="col-12"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Evolución mensual del brote — jun 2022 – may 2023</h6><div class="chart-wrap-sm"><canvas id="mpoxMonth"></canvas></div></div></div>
+          <p class="sect-label">Distribución regional de casos acumulados (2022–2025)</p><div class="table-responsive"><table class="dt"><thead><tr><th>Región</th><th>% del total nacional</th><th>Contexto</th></tr></thead><tbody><tr><td>Metropolitana</td><td>81.0%</td><td><span class="pill pill-red">Concentración principal</span></td></tr><tr><td>Valparaíso</td><td>6.9%</td><td><span class="pill pill-orange">Segunda región</span></td></tr><tr><td>Antofagasta</td><td>2.4%</td><td><span class="pill pill-blue">Norte</span></td></tr><tr><td>Biobío</td><td>2.2%</td><td><span class="pill pill-blue">Centro-sur</span></td></tr><tr><td>Coquimbo</td><td>1.8%</td><td><span class="pill pill-green">Norte chico</span></td></tr><tr><td>Tarapacá</td><td>1.2%</td><td><span class="pill pill-green">Norte</span></td></tr><tr><td>Otras regiones</td><td>4.5%</td><td><span class="pill pill-green">Dispersión nacional</span></td></tr></tbody></table></div>
+        </div>
+      </div>
+      <div class="dash-panel" id="dengue">
+        <div class="dash-panel-head">
+          <div class="dash-dot" style="background:#d97706"></div>
+          <h2 data-es="Dengue &amp; Arbovirus — Vigilancia Vectorial" data-en="Dengue &amp; Arboviruses — Vector Surveillance">Dengue &amp; Arbovirus — Vigilancia Vectorial</h2>
+          <span class="dash-sub">MINSAL · 2020–2026</span>
+        </div>
+        <div class="dash-alert warning">⚠️ Alerta sanitaria vigente (ene 2026): Aedes aegypti detectado en aeropuerto AMB y Arica (feb 2026). Vigilancia entomológica reforzada en el norte del país.</div>
+        <div class="dash-body">
+          <div class="chile-situation mb-3">
+            <h6>🇨🇱 Situación en Chile</h6>
+            <p class="mb-0 small" data-es="Chile no tiene transmisión autóctona establecida de dengue. En 2024 se documentaron 16 casos autóctonos en el norte (primer registro histórico). En 2025, los 51 casos son 100% importados. La detección de Ae. aegypti en el aeropuerto AMB (feb 2026) es un evento de máxima alerta — posible establecimiento del vector en la Región Metropolitana. El cambio climático expande el hábitat del mosquito hacia el sur." data-en="Chile has no established dengue transmission. In 2024, 16 autochthonous cases were documented (historic first). In 2025, all 51 cases are imported. Ae. aegypti at AMB airport (Feb 2026) is a maximum alert event.">Chile no tiene transmisión autóctona establecida de dengue. En 2024 se documentaron 16 casos autóctonos en el norte (primer registro histórico). En 2025, los 51 casos son 100% importados. La detección de Ae. aegypti en el aeropuerto AMB (feb 2026) es un evento de máxima alerta — posible establecimiento del vector en la Región Metropolitana. El cambio climático expande el hábitat del mosquito hacia el sur.</p>
+          </div>
+          <div class="kpi-row"><div class="kpi-box"><div class="kv" style="color:#d97706">51</div><div class="kl">Dengue 2025 (importados)</div></div>
+<div class="kpi-box"><div class="kv" style="color:#d97706">179</div><div class="kl">Dengue 2024</div></div>
+<div class="kpi-box"><div class="kv" style="color:#d97706">13</div><div class="kl">Chikungunya 2025–26</div></div>
+<div class="kpi-box"><div class="kv" style="color:#d97706">0</div><div class="kl">Autóctonos 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#d97706">16</div><div class="kl">Autóctonos 2024</div></div>
+<div class="kpi-box"><div class="kv" style="color:#d97706">Arica+AMB</div><div class="kl">Detección Ae. aegypti</div></div></div>
+          <div class="row g-3 mb-3">
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Casos de dengue 2020–2025 (importados vs. autóctonos)</h6><div class="chart-wrap"><canvas id="dengueBar"></canvas></div></div>
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Arbovirus confirmados 2025–2026</h6><div class="chart-wrap"><canvas id="arbovirusPie"></canvas></div></div>
+      </div><div class="row g-3 mb-3"><div class="col-12"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Casos importados de dengue por país de origen · 2024 (referencia)</h6><div class="chart-wrap-sm"><canvas id="dengueOrigen"></canvas></div></div></div>
+          
+        </div>
+      </div>
+      <div class="dash-panel" id="covid">
+        <div class="dash-panel-head">
+          <div class="dash-dot" style="background:#0891b2"></div>
+          <h2 data-es="COVID-19 / SARS-CoV-2 — Vigilancia Post-Pandémica" data-en="COVID-19 — Post-Pandemic Surveillance">COVID-19 / SARS-CoV-2 — Vigilancia Post-Pandémica</h2>
+          <span class="dash-sub">MINSAL · 2025–2026</span>
+        </div>
+        <div class="dash-alert info">ℹ️ Vigilancia semanal activa. Invierno 2026: COVID-19 es el 3° virus más detectado (tras rinovirus e influenza A) en la red centinela ISP.</div>
+        <div class="dash-body">
+          <div class="chile-situation mb-3">
+            <h6>🇨🇱 Situación en Chile</h6>
+            <p class="mb-0 small" data-es="Chile transicionó a gestión endémica del SARS-CoV-2 en 2023. Acumula ~3.8M casos y ~64,200 fallecidos. En invierno 2026, COVID-19 es el 3° agente respiratorio (18.5% SE23 2025), tras rinovirus e influenza A. Subvariantes XEC y KP.2 dominantes. Positividad respiratoria total: 37.3% SE16 2026." data-en="Chile transitioned to endemic SARS-CoV-2 management in 2023. Cumulative ~3.8M cases and ~64,200 deaths. COVID-19 ranks 3rd in winter 2026 (18.5% EW23 2025). XEC and KP.2 subvariants dominant. Total respiratory positivity: 37.3% EW16 2026.">Chile transicionó a gestión endémica del SARS-CoV-2 en 2023. Acumula ~3.8M casos y ~64,200 fallecidos. En invierno 2026, COVID-19 es el 3° agente respiratorio (18.5% SE23 2025), tras rinovirus e influenza A. Subvariantes XEC y KP.2 dominantes. Positividad respiratoria total: 37.3% SE16 2026.</p>
+          </div>
+          <div class="kpi-row"><div class="kpi-box"><div class="kv" style="color:#0891b2">3.8M</div><div class="kl">Casos confirmados acum.</div></div>
+<div class="kpi-box"><div class="kv" style="color:#0891b2">~64,200</div><div class="kl">Fallecidos acumulados</div></div>
+<div class="kpi-box"><div class="kv" style="color:#0891b2">18.5%</div><div class="kl">Del total positivos SE23</div></div>
+<div class="kpi-box"><div class="kv" style="color:#0891b2">37.3%</div><div class="kl">Positividad total SE16 2026</div></div>
+<div class="kpi-box"><div class="kv" style="color:#0891b2">Top 3</div><div class="kl">Invierno 2026</div></div>
+<div class="kpi-box"><div class="kv" style="color:#0891b2">Semanal</div><div class="kl">Frecuencia de reporte</div></div></div>
+          <div class="row g-3 mb-3"><div class="col-12"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Positividad estimada SARS-CoV-2 · SE 1–46 2025</h6><div class="chart-wrap-sm"><canvas id="covidLine"></canvas></div></div></div><div class="row g-3 mb-3">
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Panel respiratorio positivo · SE 23 2025</h6><div class="chart-wrap"><canvas id="covidPie"></canvas></div></div>
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Positividad respiratoria trimestral 2025–Q1 2026</h6><div class="chart-wrap"><canvas id="covidTrimestre"></canvas></div></div>
+      </div>
+          
+        </div>
+      </div>
+      <div class="dash-panel" id="rsv">
+        <div class="dash-panel-head">
+          <div class="dash-dot" style="background:#16a34a"></div>
+          <h2 data-es="VRS — Virus Respiratorio Sincicial" data-en="RSV — Respiratory Syncytial Virus">VRS — Virus Respiratorio Sincicial</h2>
+          <span class="dash-sub">ISP / MINSAL · Temporada 2025–2026</span>
+        </div>
+        <div class="dash-alert info">💉 Campaña nirsevimab 2026 activa. En 2025: 97.7% cobertura RN, 93% lactantes, previno 76% de hospitalizaciones y 85% de ingresos a UCI por VRS.</div>
+        <div class="dash-body">
+          <div class="chile-situation mb-3">
+            <h6>🇨🇱 Situación en Chile</h6>
+            <p class="mb-0 small" data-es="El VRS causa ~5,000 hospitalizaciones/año en <5 años. La temporada 2025 fue la primera con nirsevimab en el programa nacional: 97.7% cobertura en RN, 93% en lactantes de 1–5 meses, previniendo 76% de hospitalizaciones y 85% de UCI. Temporada 2026 activa. El pico ocurre entre junio y agosto, con adelantamiento post-pandémico de 2–3 semanas respecto al patrón histórico." data-en="RSV causes ~5,000 hospitalisations/year in <5 year olds. The 2025 season was the first with nirsevimab: 97.7% NB coverage, 93% infants, preventing 76% hospitalisations and 85% ICU admissions. 2026 campaign active.">El VRS causa ~5,000 hospitalizaciones/año en <5 años. La temporada 2025 fue la primera con nirsevimab en el programa nacional: 97.7% cobertura en RN, 93% en lactantes de 1–5 meses, previniendo 76% de hospitalizaciones y 85% de UCI. Temporada 2026 activa. El pico ocurre entre junio y agosto, con adelantamiento post-pandémico de 2–3 semanas respecto al patrón histórico.</p>
+          </div>
+          <div class="kpi-row"><div class="kpi-box"><div class="kv" style="color:#16a34a">~5,000</div><div class="kl">Hosp./año en <5 años</div></div>
+<div class="kpi-box"><div class="kv" style="color:#16a34a">97.7%</div><div class="kl">Cobertura RN 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#16a34a">93%</div><div class="kl">Cobertura lactantes 2025</div></div>
+<div class="kpi-box"><div class="kv" style="color:#16a34a">76%</div><div class="kl">Hospitalizaciones prevenidas</div></div>
+<div class="kpi-box"><div class="kv" style="color:#16a34a">85%</div><div class="kl">Ingresos UCI prevenidos</div></div>
+<div class="kpi-box"><div class="kv" style="color:#16a34a">3.3%</div><div class="kl">Del total positivos SE23</div></div></div>
+          <div class="row g-3 mb-3">
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Patrón estacional VRS · distribución mensual típica</h6><div class="chart-wrap"><canvas id="rsvSeasonal"></canvas></div></div>
+        <div class="col-md-6"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Impacto nirsevimab · hosp. y UCI evitadas · 2025</h6><div class="chart-wrap"><canvas id="rsvImpact"></canvas></div></div>
+      </div><div class="row g-3 mb-3"><div class="col-12"><h6 class="text-muted text-uppercase" style="font-size:.73rem;letter-spacing:.05em">Hospitalizaciones VRS por grupo etario · %</h6><div class="chart-wrap-sm"><canvas id="rsvAge"></canvas></div></div></div>
+          <p class="sect-label">Grupos de riesgo para VRS grave en Chile</p><div class="table-responsive"><table class="dt"><thead><tr><th>Grupo de riesgo</th><th>Impacto</th><th>Cobertura inmunización 2025</th></tr></thead><tbody><tr><td>Recién nacidos (0–2 meses)</td><td><span class="pill pill-red">Riesgo máximo</span></td><td>97.7% (nirsevimab)</td></tr><tr><td>Lactantes (3–11 meses)</td><td><span class="pill pill-red">Muy alto</span></td><td>93% (nirsevimab)</td></tr><tr><td>Prematuros / cardiopatías</td><td><span class="pill pill-red">Muy alto</span></td><td>Grupo prioritario</td></tr><tr><td>Adultos mayores ≥ 60 años</td><td><span class="pill pill-orange">Alto</span></td><td>Campaña adultos 2026</td></tr><tr><td>Inmunocomprometidos</td><td><span class="pill pill-orange">Alto</span></td><td>Evaluación caso a caso</td></tr><tr><td>1–4 años</td><td><span class="pill pill-blue">Moderado-alto</span></td><td>No incluido rutina</td></tr></tbody></table></div>
+        </div>
+      </div>
+    </div><!-- /container -->
+  </main>
+  <footer class="portal-footer">
+    <div class="footer-logos">
+      <div class="container d-flex justify-content-center align-items-center gap-5 flex-wrap">
+        <img src="images/logos/logo_uga.png" alt="UGA" style="height:52px;width:auto"/>
+        <img src="images/logos/logo_accdis.png" alt="ACCDiS" style="height:52px;width:auto"/>
+        <img src="images/logos/logo_chair.png" alt="CHAIR" style="height:52px;width:auto"/>
+        <img src="images/logos/logo_facicqf.png" alt="CQYF" style="height:52px;width:auto"/>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-9"><p class="mb-0">Portal de Patógenos Chile — Datos oficiales MINSAL/ISP. SE 17, 2026.</p></div>
+          <div class="col-md-3 text-md-end"><img src="img/pdn_logo.png" alt="PDN" style="height:40px;width:auto"/></div>
+        </div>
+      </div>
+    </div>
+  <div class="footer-a11y"><div class="container d-flex flex-wrap align-items-center justify-content-between gap-2"><a class="portal-a11y-link" href="accessibility.html" aria-label="Declaración de accesibilidad WCAG 2.2 nivel AA" data-es-aria="Declaración de accesibilidad WCAG 2.2 nivel AA" data-en-aria="WCAG 2.2 level AA accessibility statement"><i class="bi bi-universal-access" aria-hidden="true"></i><span data-es="Accesibilidad" data-en="Accessibility">Accesibilidad</span><span class="portal-a11y-badge" aria-hidden="true">WCAG 2.2 AA</span></a><small class="text-muted" data-es="Verificada en 20/20 páginas · Compromiso AAA selectivo" data-en="Verified on 20/20 pages · Selective AAA commitment">Verificada en 20/20 páginas · Compromiso AAA selectivo</small></div></div></footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="lang.js"></script>
+<script defer src="assets/data-loader.js"></script>
+<script>
+(function(){
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js';
+  s.onload=initCharts;
+  s.onerror=function(){document.querySelectorAll('.chart-wrap,.chart-wrap-sm').forEach(function(el){el.innerHTML='<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:.78rem;color:#6c757d;background:#f0f4fa;border-radius:6px;text-align:center;padding:1rem">⚠ No se pudo cargar Chart.js.<br>Revise su conexión a internet.</div>';});};
+  document.head.appendChild(s);
+})();
+function initCharts(){
+  Chart.defaults.font.family="'IBM Plex Sans','Segoe UI',system-ui,sans-serif";
+  Chart.defaults.font.size=11;
+  Chart.defaults.plugins.legend.labels.boxWidth=11;
+  Chart.defaults.plugins.legend.labels.padding=10;
+  var SE=['SE1','SE3','SE5','SE7','SE9','SE11','SE13','SE15','SE17','SE19','SE21','SE23','SE25','SE27','SE29','SE31','SE33','SE35','SE37','SE39','SE41','SE43','SE45'];
+  function base(e){return Object.assign({responsive:true,maintainAspectRatio:false},e||{});}
+  /* INFLUENZA LINE */
+  new Chart(document.getElementById('fluLine'),{type:'line',data:{labels:SE,datasets:[{label:'Positividad Influenza A (%)',data:[7,9,12,16,19,21,24,27,29,34,37,40,43,45,47,49,52,48,43,37,29,24,19],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.1)',tension:.4,fill:true,pointRadius:3,borderWidth:2},{label:'Positividad total resp. (%)',data:[17,19,21,24,26,29,32,35,37,39,41,41,42,44,46,48,52,49,46,42,35,29,24],borderColor:'#94a3b8',backgroundColor:'transparent',tension:.4,borderDash:[5,3],pointRadius:2,borderWidth:1.5}]},options:base({plugins:{legend:{position:'bottom'}},scales:{y:{min:0,max:60,title:{display:true,text:'% Positividad'}},x:{ticks:{maxRotation:45}}}})});
+  /* INFLUENZA PIE */
+  new Chart(document.getElementById('fluPie'),{type:'doughnut',data:{labels:['A(H1N1)pdm09','A(H3N2)'],datasets:[{data:[95.7,4.3],backgroundColor:['#2563eb','#93c5fd'],borderWidth:2,borderColor:'#fff'}]},options:base({plugins:{legend:{position:'bottom'}}})});
+  /* INFLUENZA BAR */
+  new Chart(document.getElementById('fluBar'),{type:'bar',data:{labels:['Rinovirus','Influenza A','COVID-19','Metaneumovirus','VRS','Parainfluenza','Adenovirus','Influenza B'],datasets:[{label:'% positivos',data:[30.4,21.8,18.5,9.6,3.3,3.1,2.8,1.8],backgroundColor:['#64748b','#2563eb','#0891b2','#f59e0b','#16a34a','#8b5cf6','#ec4899','#93c5fd']}]},options:base({indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:35,title:{display:true,text:'%'}}}})});
+  /* HANTAVIRUS BAR */
+  new Chart(document.getElementById('hantaBar'),{type:'bar',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026*'],datasets:[{label:'Casos',data:[43,47,55,49,38,55,47,44,44,39],backgroundColor:'rgba(220,38,38,.75)'},{label:'Fallecidos',data:[12,15,13,14,9,16,12,11,8,13],backgroundColor:'rgba(220,38,38,.3)'}]},options:base({plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Número'}}}})});
+  /* HANTAVIRUS PIE */
+  new Chart(document.getElementById('hantaPie'),{type:'pie',data:{labels:["La Araucanía","Los Lagos","Biobío","Aysén","Maule","Metropolitana","O'Higgins","Ñuble","Los Ríos"],datasets:[{data:[18,15,13,11,10,9,8,7,9],backgroundColor:['#991b1b','#b91c1c','#dc2626','#ef4444','#f87171','#fca5a5','#fecaca','#fed7d7','#fee2e2'],borderWidth:2,borderColor:'#fff'}]},options:base({plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10}}}})});
+  /* HANTAVIRUS LETHALITY */
+  new Chart(document.getElementById('hantaLetal'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026*'],datasets:[{label:'Letalidad (%)',data:[28,32,24,29,24,29,26,25,18,33],borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.08)',tension:.4,fill:true,pointRadius:5,pointBackgroundColor:'#dc2626',borderWidth:2}]},options:base({plugins:{legend:{display:false}},scales:{y:{min:0,max:45,title:{display:true,text:'Letalidad (%)'}}}})});
+  /* MPOX BAR */
+  new Chart(document.getElementById('mpoxBar'),{type:'bar',data:{labels:['2022','2023','2024','2025'],datasets:[{label:'Confirmados',data:[1381,498,300,186],backgroundColor:'rgba(124,58,237,.78)'},{label:'Probables',data:[21,12,5,0],backgroundColor:'rgba(167,139,250,.5)'}]},options:base({plugins:{legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Número de casos'}}}})});
+  /* MPOX PIE */
+  new Chart(document.getElementById('mpoxPie'),{type:'doughnut',data:{labels:['Metropolitana','Valparaíso','Antofagasta','Biobío','Coquimbo','Tarapacá','Otras'],datasets:[{data:[81,6.9,2.4,2.2,1.8,1.2,4.5],backgroundColor:['#5b21b6','#7c3aed','#8b5cf6','#a78bfa','#c4b5fd','#ddd6fe','#ede9fe'],borderWidth:2,borderColor:'#fff'}]},options:base({plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10}}}})});
+  /* MPOX MONTHLY */
+  new Chart(document.getElementById('mpoxMonth'),{type:'bar',data:{labels:['Jun 22','Jul 22','Ago 22','Sep 22','Oct 22','Nov 22','Dic 22','Ene 23','Feb 23','Mar 23','Abr 23','May 23'],datasets:[{label:'Casos mensuales',data:[85,290,350,280,195,120,61,35,22,18,15,12],backgroundColor:'rgba(124,58,237,.65)'}]},options:base({plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'Nuevos casos'}}}})});
+  /* DENGUE BAR */
+  new Chart(document.getElementById('dengueBar'),{type:'bar',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{label:'Importados',data:[18,22,45,68,163,51],backgroundColor:'rgba(217,119,6,.75)'},{label:'Autóctonos',data:[0,0,0,0,16,0],backgroundColor:'rgba(217,119,6,.3)'}]},options:base({plugins:{legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'Número de casos'}}}})});
+  /* ARBOVIRUS PIE */
+  new Chart(document.getElementById('arbovirusPie'),{type:'pie',data:{labels:['Dengue','Chikungunya','Zika','Otros'],datasets:[{data:[51,13,4,2],backgroundColor:['#d97706','#f59e0b','#fbbf24','#fde68a'],borderWidth:2,borderColor:'#fff'}]},options:base({plugins:{legend:{position:'bottom'}}})});
+  /* DENGUE ORIGEN */
+  new Chart(document.getElementById('dengueOrigen'),{type:'bar',data:{labels:['Brasil','Colombia','Venezuela','Argentina','Cuba','Rep. Dominicana','Paraguay','Otros'],datasets:[{label:'Casos importados',data:[52,28,19,18,14,12,10,26],backgroundColor:'rgba(217,119,6,.72)'}]},options:base({plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'Número de casos'}}}})});
+  /* COVID LINE */
+  new Chart(document.getElementById('covidLine'),{type:'line',data:{labels:SE,datasets:[{label:'Positividad SARS-CoV-2 (%)',data:[13,12,11,10,9,10,11,12,13,14,15,16,17,18,19,20,19,17,15,13,11,10,9],borderColor:'#0891b2',backgroundColor:'rgba(8,145,178,.1)',tension:.4,fill:true,pointRadius:3,borderWidth:2}]},options:base({plugins:{legend:{display:false}},scales:{y:{min:0,max:28,title:{display:true,text:'% Positividad'}},x:{ticks:{maxRotation:45}}}})});
+  /* COVID PIE */
+  new Chart(document.getElementById('covidPie'),{type:'doughnut',data:{labels:['Rinovirus','Influenza A','COVID-19','Metaneumovirus','VRS','Parainfluenza','Adenovirus','Influenza B'],datasets:[{data:[30.4,21.8,18.5,9.6,3.3,3.1,2.8,1.8],backgroundColor:['#64748b','#2563eb','#0891b2','#f59e0b','#16a34a','#8b5cf6','#ec4899','#93c5fd'],borderWidth:2,borderColor:'#fff'}]},options:base({plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10}}}})});
+  /* COVID TRIMESTRE */
+  new Chart(document.getElementById('covidTrimestre'),{type:'bar',data:{labels:['Q1 2025','Q2 2025','Q3 2025','Q4 2025','Q1 2026'],datasets:[{label:'Positividad resp. promedio (%)',data:[11.5,14.2,18.8,12.1,37.3],backgroundColor:['rgba(8,145,178,.55)','rgba(8,145,178,.60)','rgba(8,145,178,.80)','rgba(8,145,178,.60)','rgba(8,145,178,.88)']}]},options:base({plugins:{legend:{display:false}},scales:{y:{min:0,max:50,title:{display:true,text:'% Positividad promedio'}}}})});
+  /* VRS SEASONAL */
+  new Chart(document.getElementById('rsvSeasonal'),{type:'line',data:{labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],datasets:[{label:'Actividad VRS (índice relativo)',data:[14,11,18,42,70,86,95,80,54,28,16,11],borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.13)',tension:.5,fill:true,pointRadius:4,pointBackgroundColor:'#16a34a',borderWidth:2}]},options:base({plugins:{legend:{display:false}},scales:{y:{min:0,max:110,title:{display:true,text:'Actividad relativa (%)'}}}})});
+  /* VRS IMPACT */
+  new Chart(document.getElementById('rsvImpact'),{type:'bar',data:{labels:['Hosp. esperadas','Hosp. evitadas','UCI esperadas','UCI evitadas'],datasets:[{label:'Niños < 1 año',data:[5000,3800,800,680],backgroundColor:['rgba(22,163,74,.22)','rgba(22,163,74,.82)','rgba(22,163,74,.22)','rgba(22,163,74,.82)']}]},options:base({plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'Número estimado'}}}})});
+  /* VRS AGE */
+  new Chart(document.getElementById('rsvAge'),{type:'bar',data:{labels:['< 3 meses','3–11 meses','1–2 años','3–4 años','5–14 años','15–59 años','≥ 60 años'],datasets:[{label:'% del total de hospitalizaciones VRS',data:[30,28,18,9,3,4,8],backgroundColor:['#14532d','#15803d','#16a34a','#22c55e','#86efac','#4ade80','#a3e635']}]},options:base({plugins:{legend:{display:false}},scales:{y:{title:{display:true,text:'% hospitalizaciones'},max:35}}})});
+}
+</script>
+</body>
+</html>

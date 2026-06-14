@@ -1,0 +1,522 @@
+{
+  "BannerFile": {
+    "$defs": {
+      "BannerStat": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          },
+          "label_es": {
+            "title": "Label Es",
+            "type": "string"
+          },
+          "label_en": {
+            "title": "Label En",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "value",
+          "label_es",
+          "label_en"
+        ],
+        "title": "BannerStat",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "schema_version": {
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "updated_at": {
+        "format": "date-time",
+        "title": "Updated At",
+        "type": "string"
+      },
+      "stats": {
+        "items": {
+          "$ref": "#/$defs/BannerStat"
+        },
+        "title": "Stats",
+        "type": "array"
+      }
+    },
+    "required": [
+      "schema_version",
+      "updated_at",
+      "stats"
+    ],
+    "title": "BannerFile",
+    "type": "object"
+  },
+  "BannerStat": {
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "value": {
+        "title": "Value",
+        "type": "string"
+      },
+      "label_es": {
+        "title": "Label Es",
+        "type": "string"
+      },
+      "label_en": {
+        "title": "Label En",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "value",
+      "label_es",
+      "label_en"
+    ],
+    "title": "BannerStat",
+    "type": "object"
+  },
+  "PathogenCard": {
+    "$defs": {
+      "StatTriplet": {
+        "properties": {
+          "value": {
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Value",
+            "type": "string"
+          },
+          "label_es": {
+            "title": "Label Es",
+            "type": "string"
+          },
+          "label_en": {
+            "title": "Label En",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "label_es",
+          "label_en"
+        ],
+        "title": "StatTriplet",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "name_es": {
+        "title": "Name Es",
+        "type": "string"
+      },
+      "name_en": {
+        "title": "Name En",
+        "type": "string"
+      },
+      "icon": {
+        "title": "Icon",
+        "type": "string"
+      },
+      "color": {
+        "title": "Color",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "endemic",
+          "alert",
+          "monitoring",
+          "contained"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "status_label_es": {
+        "title": "Status Label Es",
+        "type": "string"
+      },
+      "status_label_en": {
+        "title": "Status Label En",
+        "type": "string"
+      },
+      "page": {
+        "title": "Page",
+        "type": "string"
+      },
+      "stats": {
+        "items": {
+          "$ref": "#/$defs/StatTriplet"
+        },
+        "title": "Stats",
+        "type": "array"
+      },
+      "summary_es": {
+        "title": "Summary Es",
+        "type": "string"
+      },
+      "summary_en": {
+        "title": "Summary En",
+        "type": "string"
+      },
+      "sources": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Sources",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "name_es",
+      "name_en",
+      "icon",
+      "color",
+      "status",
+      "status_label_es",
+      "status_label_en",
+      "page",
+      "stats",
+      "summary_es",
+      "summary_en",
+      "sources"
+    ],
+    "title": "PathogenCard",
+    "type": "object"
+  },
+  "PathogenDetail": {
+    "$defs": {
+      "Source": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "format": "uri",
+                "maxLength": 2083,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "retrieved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Retrieved At"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "Source",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "schema_version": {
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "pathogen": {
+        "title": "Pathogen",
+        "type": "string"
+      },
+      "updated_at": {
+        "format": "date-time",
+        "title": "Updated At",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "endemic",
+          "alert",
+          "monitoring",
+          "contained"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "headline_stats": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Headline Stats",
+        "type": "array"
+      },
+      "notes_es": {
+        "title": "Notes Es",
+        "type": "string"
+      },
+      "notes_en": {
+        "title": "Notes En",
+        "type": "string"
+      },
+      "sources": {
+        "items": {
+          "$ref": "#/$defs/Source"
+        },
+        "title": "Sources",
+        "type": "array"
+      }
+    },
+    "required": [
+      "schema_version",
+      "pathogen",
+      "updated_at",
+      "status",
+      "headline_stats",
+      "notes_es",
+      "notes_en",
+      "sources"
+    ],
+    "title": "PathogenDetail",
+    "type": "object"
+  },
+  "PathogensFile": {
+    "$defs": {
+      "PathogenCard": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name_es": {
+            "title": "Name Es",
+            "type": "string"
+          },
+          "name_en": {
+            "title": "Name En",
+            "type": "string"
+          },
+          "icon": {
+            "title": "Icon",
+            "type": "string"
+          },
+          "color": {
+            "title": "Color",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "endemic",
+              "alert",
+              "monitoring",
+              "contained"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label_es": {
+            "title": "Status Label Es",
+            "type": "string"
+          },
+          "status_label_en": {
+            "title": "Status Label En",
+            "type": "string"
+          },
+          "page": {
+            "title": "Page",
+            "type": "string"
+          },
+          "stats": {
+            "items": {
+              "$ref": "#/$defs/StatTriplet"
+            },
+            "title": "Stats",
+            "type": "array"
+          },
+          "summary_es": {
+            "title": "Summary Es",
+            "type": "string"
+          },
+          "summary_en": {
+            "title": "Summary En",
+            "type": "string"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Sources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name_es",
+          "name_en",
+          "icon",
+          "color",
+          "status",
+          "status_label_es",
+          "status_label_en",
+          "page",
+          "stats",
+          "summary_es",
+          "summary_en",
+          "sources"
+        ],
+        "title": "PathogenCard",
+        "type": "object"
+      },
+      "StatTriplet": {
+        "properties": {
+          "value": {
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Value",
+            "type": "string"
+          },
+          "label_es": {
+            "title": "Label Es",
+            "type": "string"
+          },
+          "label_en": {
+            "title": "Label En",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "label_es",
+          "label_en"
+        ],
+        "title": "StatTriplet",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "schema_version": {
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "updated_at": {
+        "format": "date-time",
+        "title": "Updated At",
+        "type": "string"
+      },
+      "epi_week": {
+        "title": "Epi Week",
+        "type": "string"
+      },
+      "items": {
+        "items": {
+          "$ref": "#/$defs/PathogenCard"
+        },
+        "title": "Items",
+        "type": "array"
+      }
+    },
+    "required": [
+      "schema_version",
+      "updated_at",
+      "epi_week",
+      "items"
+    ],
+    "title": "PathogensFile",
+    "type": "object"
+  },
+  "Source": {
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "url": {
+        "anyOf": [
+          {
+            "format": "uri",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Url"
+      },
+      "retrieved_at": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Retrieved At"
+      }
+    },
+    "required": [
+      "id",
+      "name"
+    ],
+    "title": "Source",
+    "type": "object"
+  },
+  "StatTriplet": {
+    "properties": {
+      "value": {
+        "maxLength": 20,
+        "minLength": 1,
+        "title": "Value",
+        "type": "string"
+      },
+      "label_es": {
+        "title": "Label Es",
+        "type": "string"
+      },
+      "label_en": {
+        "title": "Label En",
+        "type": "string"
+      }
+    },
+    "required": [
+      "value",
+      "label_es",
+      "label_en"
+    ],
+    "title": "StatTriplet",
+    "type": "object"
+  }
+}

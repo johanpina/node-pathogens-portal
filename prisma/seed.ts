@@ -1,5 +1,6 @@
 import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { seedPathogens } from "./seedPathogens";
 
 const prisma = new PrismaClient();
 
@@ -405,6 +406,9 @@ async function main() {
     });
   }
   console.log(`Upserted ${eventData.length} events`);
+
+  // ── Pathogen surveillance (ported weekly bundle) ──
+  await seedPathogens();
 
   console.log("Seed complete!");
 }

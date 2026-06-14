@@ -3,26 +3,32 @@ import Link from "next/link";
 import PageHeader from "@/components/layout/PageHeader";
 import DashboardCard from "@/components/cards/DashboardCard";
 import HighlightCard from "@/components/cards/HighlightCard";
+import HomeAlertBanner from "@/components/public/HomeAlertBanner";
+import BannerStats from "@/components/public/BannerStats";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
+import { pick } from "@/lib/pickLang";
 
 export const dynamic = "force-dynamic";
 
 async function getHomeData() {
   const now = new Date();
-  const [news, highlights, dashboards, events, topics, settings] = await Promise.all([
-    prisma.news.findMany({ where: { published: true }, orderBy: { date: "desc" }, take: 5 }),
-    prisma.highlight.findMany({ where: { published: true }, orderBy: { date: "desc" }, take: 3 }),
-    prisma.dashboard.findMany({ where: { published: true }, orderBy: { createdAt: "asc" }, take: 3 }),
-    prisma.event.findMany({ orderBy: { dateStart: "asc" } }),
-    prisma.topic.findMany({ orderBy: { menuOrder: "asc" } }),
-    prisma.setting.findMany({ where: { key: { in: ["site_title", "site_description"] } } }),
-  ]);
+  const [news, highlights, dashboards, events, topics, settings, epiMeta, bannerStats] =
+    await Promise.all([
+      prisma.news.findMany({ where: { published: true }, orderBy: { date: "desc" }, take: 5 }),
+      prisma.highlight.findMany({ where: { published: true }, orderBy: { date: "desc" }, take: 3 }),
+      prisma.dashboard.findMany({ where: { published: true }, orderBy: { createdAt: "asc" }, take: 3 }),
+      prisma.event.findMany({ orderBy: { dateStart: "asc" } }),
+      prisma.topic.findMany({ orderBy: { menuOrder: "asc" } }),
+      prisma.setting.findMany({ where: { key: { in: ["site_title", "site_description"] } } }),
+      prisma.epiMeta.findUnique({ where: { id: "current" } }),
+      prisma.bannerStat.findMany({ orderBy: { order: "asc" } }),
+    ]);
 
   const settingsMap = Object.fromEntries(settings.map((s) => [s.key, s.value]));
   const upcomingEvents = events.filter((e) => new Date(e.dateStart) >= now);
 
-  return { news, highlights, dashboards, upcomingEvents, topics, settings: settingsMap };
+  return { news, highlights, dashboards, upcomingEvents, topics, settings: settingsMap, epiMeta, bannerStats };
 }
 
 function formatDate(date: Date | string, lang: string) {
@@ -40,13 +46,28 @@ function isRecent(date: Date | string) {
 }
 
 export default async function HomePage() {
-  const [{ news, highlights, dashboards, upcomingEvents, topics, settings }, lang] =
+  const [{ news, highlights, dashboards, upcomingEvents, topics, settings, epiMeta, bannerStats }, lang] =
     await Promise.all([getHomeData(), getLang()]);
   const t = getT(lang);
 
   return (
     <>
       <PageHeader title={settings.site_title ?? "Chile Pathogen Portal"} />
+
+      {epiMeta && (
+        <HomeAlertBanner
+          text={pick(epiMeta, lang, "homeAlert")}
+          epiWeek={epiMeta.epiWeek}
+          label={t.surveillance.epiWeek}
+        />
+      )}
+      <BannerStats
+        stats={bannerStats.map((s) => ({
+          id: s.id,
+          value: s.value,
+          label: pick(s, lang, "label"),
+        }))}
+      />
 
       <div className="container py-4">
         <div className="row">
