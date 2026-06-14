@@ -27,9 +27,14 @@ export default async function AdminSurveillancePage() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="h3 mb-0">Vigilancia de patógenos</h1>
-        <Link href="/admin/surveillance/import" className="btn btn-primary">
-          <i className="bi bi-upload me-1"></i> Importar bundle
-        </Link>
+        <div className="d-flex gap-2">
+          <Link href="/admin/surveillance/charts" className="btn btn-outline-secondary">
+            <i className="bi bi-graph-up me-1"></i> Gráficos
+          </Link>
+          <Link href="/admin/surveillance/import" className="btn btn-primary">
+            <i className="bi bi-upload me-1"></i> Importar bundle
+          </Link>
+        </div>
       </div>
 
       <p className="text-muted">

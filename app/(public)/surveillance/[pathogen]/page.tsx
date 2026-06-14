@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
 import { pick } from "@/lib/pickLang";
+import PathogenCharts from "@/components/surveillance/PathogenCharts";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function PathogenDetailPage({
       include: {
         stats: { where: { kind: "headline" }, orderBy: { order: "asc" } },
         sources: { orderBy: { order: "asc" } },
+        charts: { orderBy: { order: "asc" } },
       },
     }),
     getLang(),
@@ -76,6 +78,16 @@ export default async function PathogenDetailPage({
             </div>
           </section>
         )}
+
+        <PathogenCharts
+          charts={pathogen.charts.map((c) => ({
+            id: c.id,
+            kind: c.kind,
+            title: pick(c, lang, "title"),
+            narrative: pick(c, lang, "narrative") || null,
+            config: c.config as { type: string; data: unknown; options?: unknown },
+          }))}
+        />
 
         {notes && (
           <section className="mb-5">
