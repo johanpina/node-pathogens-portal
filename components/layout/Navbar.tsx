@@ -12,18 +12,16 @@ export default function Navbar({ lang }: { lang: Lang }) {
   const t = getT(lang);
 
   const mainNavLinks = [
-    { href: "/surveillance", label: t.surveillance.navLabel },
-    { href: "/dashboards", label: t.nav.dataDashboards },
+    { href: "/surveillance", label: t.nav.dataDashboards },
+    { href: "/topics", label: t.nav.topics },
     { href: "/highlights", label: t.nav.dataHighlights },
     { href: "/datasets", label: t.nav.datasets },
-    { href: "/topics", label: t.nav.topics },
     { href: "/publications", label: t.nav.publications },
   ];
 
   const topNavLinks = [
     { href: "/about", label: t.nav.about },
     { href: "/contact", label: t.nav.contact },
-    { href: "/events", label: t.nav.events },
   ];
 
   function isActive(href: string) {

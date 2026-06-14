@@ -3,7 +3,7 @@ export type Lang = "en" | "es";
 export const translations = {
   en: {
     nav: {
-      dataDashboards: "Data Dashboards",
+      dataDashboards: "Dashboards",
       dataHighlights: "Data Highlights",
       datasets: "Datasets",
       topics: "Topics",
@@ -70,9 +70,11 @@ export const translations = {
       empty: "No content for this topic yet.",
     },
     surveillance: {
-      navLabel: "Surveillance",
-      title: "Epidemiological Surveillance",
-      intro: "Weekly surveillance of priority pathogens in Chile, with figures traceable to official sources.",
+      navLabel: "Dashboards",
+      title: "Dashboards",
+      ourDashboards: "Our Dashboards",
+      externalDashboards: "External Dashboards",
+      intro: "Interactive surveillance of priority pathogens in Chile, with figures traceable to official sources. Explore trends per pathogen.",
       epiWeek: "Epidemiological week",
       lastUpdate: "Last update",
       viewDetail: "View detail →",
@@ -104,8 +106,8 @@ export const translations = {
   },
   es: {
     nav: {
-      dataDashboards: "Data Dashboards",
-      dataHighlights: "Data Highlights",
+      dataDashboards: "Tableros",
+      dataHighlights: "Destacados",
       datasets: "Datasets",
       topics: "Tópicos",
       publications: "Publicaciones",
@@ -171,9 +173,11 @@ export const translations = {
       empty: "No hay contenido para este tópico aún.",
     },
     surveillance: {
-      navLabel: "Vigilancia",
-      title: "Vigilancia Epidemiológica",
-      intro: "Vigilancia semanal de patógenos prioritarios en Chile, con cifras trazables a fuentes oficiales.",
+      navLabel: "Tableros",
+      title: "Tableros",
+      ourDashboards: "Nuestros tableros",
+      externalDashboards: "Tableros externos",
+      intro: "Vigilancia interactiva de patógenos prioritarios en Chile, con cifras trazables a fuentes oficiales. Explora las tendencias por patógeno.",
       epiWeek: "Semana epidemiológica",
       lastUpdate: "Última actualización",
       viewDetail: "Ver detalle →",

@@ -1,59 +1,39 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import PageHeader from "@/components/layout/PageHeader";
-import DashboardCard from "@/components/cards/DashboardCard";
-import HighlightCard from "@/components/cards/HighlightCard";
+import PathogenCard from "@/components/cards/PathogenCard";
 import HomeAlertBanner from "@/components/public/HomeAlertBanner";
-import BannerStats from "@/components/public/BannerStats";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
 import { pick } from "@/lib/pickLang";
+import { mapLink } from "@/lib/surveillance/linkMap";
 
 export const dynamic = "force-dynamic";
 
 async function getHomeData() {
-  const now = new Date();
-  const [news, highlights, dashboards, events, topics, settings, epiMeta, bannerStats] =
+  const [pathogens, highlights, topics, news, settings, epiMeta, bannerStats] =
     await Promise.all([
-      prisma.news.findMany({ where: { published: true }, orderBy: { date: "desc" }, take: 5 }),
-      prisma.highlight.findMany({ where: { published: true }, orderBy: { date: "desc" }, take: 3 }),
-      prisma.dashboard.findMany({ where: { published: true }, orderBy: { createdAt: "asc" }, take: 3 }),
-      prisma.event.findMany({ orderBy: { dateStart: "asc" } }),
+      prisma.pathogen.findMany({
+        orderBy: { order: "asc" },
+        include: { stats: { where: { kind: "card" }, orderBy: { order: "asc" } } },
+      }),
+      prisma.surveillanceHighlight.findMany({ orderBy: { order: "asc" }, take: 3 }),
       prisma.topic.findMany({ orderBy: { menuOrder: "asc" } }),
+      prisma.surveillanceNews.findMany({ orderBy: [{ order: "asc" }, { isoDate: "desc" }], take: 5 }),
       prisma.setting.findMany({ where: { key: { in: ["site_title", "site_description"] } } }),
       prisma.epiMeta.findUnique({ where: { id: "current" } }),
       prisma.bannerStat.findMany({ orderBy: { order: "asc" } }),
     ]);
-
   const settingsMap = Object.fromEntries(settings.map((s) => [s.key, s.value]));
-  const upcomingEvents = events.filter((e) => new Date(e.dateStart) >= now);
-
-  return { news, highlights, dashboards, upcomingEvents, topics, settings: settingsMap, epiMeta, bannerStats };
-}
-
-function formatDate(date: Date | string, lang: string) {
-  return new Date(date).toLocaleDateString(lang === "es" ? "es-CL" : "en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function isRecent(date: Date | string) {
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  return new Date(date) >= thirtyDaysAgo;
+  return { pathogens, highlights, topics, news, settings: settingsMap, epiMeta, bannerStats };
 }
 
 export default async function HomePage() {
-  const [{ news, highlights, dashboards, upcomingEvents, topics, settings, epiMeta, bannerStats }, lang] =
+  const [{ pathogens, highlights, topics, news, settings, epiMeta, bannerStats }, lang] =
     await Promise.all([getHomeData(), getLang()]);
   const t = getT(lang);
 
   return (
     <>
-      <PageHeader title={settings.site_title ?? "Chile Pathogen Portal"} />
-
       {epiMeta && (
         <HomeAlertBanner
           text={pick(epiMeta, lang, "homeAlert")}
@@ -61,50 +41,90 @@ export default async function HomePage() {
           label={t.surveillance.epiWeek}
         />
       )}
-      <BannerStats
-        stats={bannerStats.map((s) => ({
-          id: s.id,
-          value: s.value,
-          label: pick(s, lang, "label"),
-        }))}
-      />
 
-      <div className="container py-4">
-        <div className="row">
+      {/* ── Hero ── */}
+      <section className="portal-hero">
+        <div className="container">
+          <h1>{settings.site_title ?? "Portal de Patógenos Chile"}</h1>
+          <p className="hero-subtitle">
+            {settings.site_description ??
+              "Vigilancia, identificación e investigación de patógenos en Chile."}
+          </p>
+          <Link href="/topics" className="btn-accent">
+            {t.home.topicsTitle} <i className="bi bi-arrow-right ms-1"></i>
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Banner stats strip ── */}
+      {bannerStats.length > 0 && (
+        <div className="hero-stats">
+          <div className="container">
+            <div className="row text-center g-3">
+              {bannerStats.map((s) => (
+                <div className="col-6 col-md-3" key={s.id}>
+                  <div className="stat-value">{s.value}</div>
+                  <div className="stat-label">{pick(s, lang, "label")}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="container py-5">
+        <div className="row g-5">
           {/* ── Main column ── */}
-          <div className="col-md-8">
-
-            {/* Data Dashboards */}
+          <div className="col-lg-8">
+            {/* Dashboards */}
             <section className="mb-5">
-              <div className="d-flex justify-content-between align-items-baseline mb-3">
-                <h2 className="section-title">{t.home.dashboardsTitle}</h2>
-                <Link href="/dashboards" className="see-all-link">
+              <div className="section-head">
+                <h2 className="section-title">{t.nav.dataDashboards}</h2>
+                <Link href="/surveillance" className="see-all-link">
                   {t.home.seeAllDashboards}
                 </Link>
               </div>
-              {dashboards.length > 0 ? (
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                  {dashboards.map((d) => (
-                    <DashboardCard key={d.id} {...d} />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-muted small">{t.home.noDashboards}</p>
-              )}
+              <p className="section-intro">{t.surveillance.intro}</p>
+              <div className="row row-cols-1 row-cols-md-2 g-4">
+                {pathogens.slice(0, 4).map((p) => (
+                  <PathogenCard
+                    key={p.id}
+                    id={p.id}
+                    name={pick(p, lang, "name")}
+                    status={p.status}
+                    statusLabel={pick(p, lang, "statusLabel")}
+                    icon={p.icon}
+                    color={p.color}
+                    summary={pick(p, lang, "summary")}
+                    stats={p.stats.map((s) => ({ value: s.value, label: pick(s, lang, "label") }))}
+                    detailLabel={t.surveillance.viewDetail}
+                  />
+                ))}
+              </div>
             </section>
 
             {/* Data Highlights */}
             <section className="mb-5">
-              <div className="d-flex justify-content-between align-items-baseline mb-3">
+              <div className="section-head">
                 <h2 className="section-title">{t.home.highlightsTitle}</h2>
                 <Link href="/highlights" className="see-all-link">
                   {t.home.seeAllHighlights}
                 </Link>
               </div>
               {highlights.length > 0 ? (
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                   {highlights.map((h) => (
-                    <HighlightCard key={h.id} {...h} />
+                    <div className="col" key={h.id}>
+                      <Link href={mapLink(h.link)} className="text-decoration-none d-block h-100">
+                        <div className="card h-100 shadow-sm clean-card">
+                          <div className="card-body">
+                            <div className="display-6 fw-bold text-primary">{h.metricValue}</div>
+                            <div className="small text-muted mb-2">{pick(h, lang, "metricLabel")}</div>
+                            <p className="text-dark mb-0 small">{pick(h, lang, "title")}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -112,92 +132,54 @@ export default async function HomePage() {
               )}
             </section>
 
+            {/* Explore Topics */}
+            {topics.length > 0 && (
+              <section>
+                <div className="section-head">
+                  <h2 className="section-title">{t.home.topicsTitle}</h2>
+                  <Link href="/topics" className="see-all-link">
+                    {t.home.seeAllHighlights}
+                  </Link>
+                </div>
+                <p className="section-intro">{t.home.topicsDesc}</p>
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                  {topics.map((topic) => (
+                    <div className="col" key={topic.id}>
+                      <Link href={`/topics/${topic.slug}`} className="text-decoration-none">
+                        <div className="topic-tile">
+                          <i className="bi bi-diagram-3 me-2"></i>
+                          {topic.name}
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
 
-          {/* ── Sidebar ── */}
-          <div className="col-md-4">
-
-            {/* Topics */}
-            {topics.length > 0 && (
-              <div className="sidebar-box">
-                <h5>{t.home.topicsTitle}</h5>
-                <p className="sidebar-desc">{t.home.topicsDesc}</p>
-                {topics.map((topic) => (
-                  <Link key={topic.id} href={`/topics/${topic.slug}`} className="topic-btn">
-                    {topic.name}
-                  </Link>
-                ))}
+          {/* ── Sidebar: News & Updates ── */}
+          <div className="col-lg-4">
+            <div className="news-card">
+              <div className="news-card-head">
+                <span>{t.home.whatsNew}</span>
+                <Link href="/news">{t.home.seeAllNews}</Link>
               </div>
-            )}
-
-            {/* What's New */}
-            {news.length > 0 && (
-              <div className="sidebar-box">
-                <h5>{t.home.whatsNew}</h5>
-                <p className="sidebar-desc">{t.home.whatsNewDesc}</p>
-                {news.slice(0, 4).map((n) => (
-                  <div key={n.id} className="news-sidebar-item">
-                    <div className="item-date">
-                      {formatDate(n.date, lang)}
-                      {isRecent(n.date) && (
-                        <span className="badge-new">{t.common.new}</span>
-                      )}
+              <div className="news-card-body">
+                {news.length === 0 ? (
+                  <p className="small text-muted mb-0">{t.news.empty}</p>
+                ) : (
+                  news.map((n) => (
+                    <div className="news-item" key={n.id}>
+                      <div className="news-item-date">{n.dateLabel}</div>
+                      <Link href={mapLink(n.link)} className="news-item-title">
+                        {pick(n, lang, "title")}
+                      </Link>
                     </div>
-                    <div className="item-title">
-                      <Link href={`/news/${n.slug}`}>{n.title}</Link>
-                    </div>
-                  </div>
-                ))}
-                <Link
-                  href="/news"
-                  className="see-all-link d-block mt-2 text-center btn btn-light btn-sm"
-                >
-                  {t.home.seeAllNews}
-                </Link>
+                  ))
+                )}
               </div>
-            )}
-
-            {/* Events */}
-            <div className="sidebar-box">
-              <h5>{t.home.eventsTitle}</h5>
-              <p className="sidebar-desc">{t.home.eventsDesc}</p>
-              <p className="fw-semibold small mb-1">{t.home.upcomingEvents}</p>
-              {upcomingEvents.length === 0 ? (
-                <p className="small text-muted">{t.home.noUpcomingEvents}</p>
-              ) : (
-                upcomingEvents.slice(0, 2).map((e) => {
-                  const start = new Date(e.dateStart);
-                  const day = start.toLocaleDateString(lang === "es" ? "es-CL" : "en-GB", { day: "2-digit" });
-                  const month = start.toLocaleDateString(lang === "es" ? "es-CL" : "en-GB", { month: "short" });
-                  return (
-                    <div key={e.id} className="event-sidebar-item">
-                      <div className="event-date-small">
-                        <div className="e-day">{day}</div>
-                        <div className="e-month">{month}</div>
-                      </div>
-                      <div>
-                        <a
-                          href={e.eventUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="small"
-                        >
-                          {e.title}
-                        </a>
-                        {e.venue && <div className="small text-muted">{e.venue}</div>}
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-              <Link
-                href="/events"
-                className="see-all-link d-block mt-2 text-center btn btn-light btn-sm"
-              >
-                {t.home.seeAllEvents}
-              </Link>
             </div>
-
           </div>
         </div>
       </div>
