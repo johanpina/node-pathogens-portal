@@ -16,6 +16,17 @@ interface PublicationsProps {
   query?: string;
 }
 
+/** Europe PMC titles contain entity-encoded HTML (e.g. &lt;i&gt;). Decode and strip tags. */
+function cleanTitle(raw: string): string {
+  const decoded = raw
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'");
+  return decoded.replace(/<[^>]+>/g, "").trim();
+}
+
 export default function Publications({ query = "pathogen" }: PublicationsProps) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,10 +80,10 @@ export default function Publications({ query = "pathogen" }: PublicationsProps) 
                         rel="noopener noreferrer"
                         className="text-decoration-none"
                       >
-                        {article.title}
+                        {cleanTitle(article.title)}
                       </a>
                     ) : (
-                      article.title
+                      cleanTitle(article.title)
                     )}
                   </h6>
                   <p className="mb-1 small text-muted">{article.authorString}</p>

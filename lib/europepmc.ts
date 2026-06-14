@@ -10,11 +10,13 @@ export interface PMCArticle {
 }
 
 /**
- * Build a Europe PMC query that requires BOTH the topic phrase and the country
- * as quoted phrases, e.g. `"pathogen" AND "Chile"`.
+ * Build a Europe PMC query that requires BOTH the topic and the country to
+ * appear in the TITLE or ABSTRACT (not merely in author affiliations, which
+ * pulled in irrelevant papers). e.g.:
+ *   (TITLE:"pathogen" OR ABSTRACT:"pathogen") AND (TITLE:"Chile" OR ABSTRACT:"Chile")
  */
 export function buildPublicationQuery(topic = "pathogen", country = "Chile"): string {
-  return `"${topic}" AND "${country}"`;
+  return `(TITLE:"${topic}" OR ABSTRACT:"${topic}") AND (TITLE:"${country}" OR ABSTRACT:"${country}")`;
 }
 
 export async function fetchPublications(
