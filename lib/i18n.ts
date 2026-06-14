@@ -35,7 +35,9 @@ export const translations = {
     },
     news: {
       title: "News",
-      empty: "No news published yet.",
+      intro: "Recent news about pathogens, outbreaks and public health in Chile.",
+      sourceNote: "Headlines aggregated from Google News. Each link opens the original source.",
+      empty: "No news available right now.",
     },
     highlights: {
       title: "Data Highlights",
@@ -154,7 +156,9 @@ export const translations = {
     },
     news: {
       title: "Noticias",
-      empty: "No hay noticias publicadas aún.",
+      intro: "Noticias recientes sobre patógenos, brotes y salud pública en Chile.",
+      sourceNote: "Titulares agregados desde Google Noticias. Cada enlace abre la fuente original.",
+      empty: "No hay noticias disponibles en este momento.",
     },
     highlights: {
       title: "Destacados",

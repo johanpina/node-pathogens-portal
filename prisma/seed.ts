@@ -36,6 +36,11 @@ async function main() {
     { key: "umami_src", value: "" },
     { key: "umami_website_id", value: "" },
     {
+      key: "news_query",
+      value:
+        '(brote OR patógeno OR hantavirus OR dengue OR influenza OR sarampión OR "virus respiratorio") Chile',
+    },
+    {
       key: "weekly_prompt",
       value: readFileSync(join(process.cwd(), "prisma", "data", "WEEKLY_PROMPT_ES.md"), "utf-8"),
     },

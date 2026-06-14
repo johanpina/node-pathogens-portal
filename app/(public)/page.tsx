@@ -6,11 +6,12 @@ import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
 import { pick } from "@/lib/pickLang";
 import { mapLink } from "@/lib/surveillance/linkMap";
+import { fetchNews, DEFAULT_NEWS_QUERY } from "@/lib/news";
 
 export const dynamic = "force-dynamic";
 
 async function getHomeData() {
-  const [pathogens, highlights, topics, news, settings, epiMeta, bannerStats] =
+  const [pathogens, highlights, topics, settings, epiMeta, bannerStats] =
     await Promise.all([
       prisma.pathogen.findMany({
         orderBy: { order: "asc" },
@@ -18,12 +19,14 @@ async function getHomeData() {
       }),
       prisma.surveillanceHighlight.findMany({ orderBy: { order: "asc" }, take: 3 }),
       prisma.topic.findMany({ orderBy: { menuOrder: "asc" } }),
-      prisma.surveillanceNews.findMany({ orderBy: [{ order: "asc" }, { isoDate: "desc" }], take: 5 }),
-      prisma.setting.findMany({ where: { key: { in: ["site_title", "site_description"] } } }),
+      prisma.setting.findMany({
+        where: { key: { in: ["site_title", "site_description", "news_query"] } },
+      }),
       prisma.epiMeta.findUnique({ where: { id: "current" } }),
       prisma.bannerStat.findMany({ orderBy: { order: "asc" } }),
     ]);
   const settingsMap = Object.fromEntries(settings.map((s) => [s.key, s.value]));
+  const news = await fetchNews(settingsMap.news_query || DEFAULT_NEWS_QUERY, 5);
   return { pathogens, highlights, topics, news, settings: settingsMap, epiMeta, bannerStats };
 }
 
@@ -169,12 +172,17 @@ export default async function HomePage() {
                 {news.length === 0 ? (
                   <p className="small text-muted mb-0">{t.news.empty}</p>
                 ) : (
-                  news.map((n) => (
-                    <div className="news-item" key={n.id}>
-                      <div className="news-item-date">{n.dateLabel}</div>
-                      <Link href={mapLink(n.link)} className="news-item-title">
-                        {pick(n, lang, "title")}
-                      </Link>
+                  news.map((n, i) => (
+                    <div className="news-item" key={i}>
+                      <div className="news-item-date">{n.source}</div>
+                      <a
+                        href={n.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="news-item-title"
+                      >
+                        {n.title}
+                      </a>
                     </div>
                   ))
                 )}

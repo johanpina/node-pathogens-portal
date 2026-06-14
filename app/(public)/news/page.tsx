@@ -1,54 +1,65 @@
-import { prisma } from "@/lib/db";
 import PageHeader from "@/components/layout/PageHeader";
-import Link from "next/link";
+import { prisma } from "@/lib/db";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
-import { pick } from "@/lib/pickLang";
-import { mapLink } from "@/lib/surveillance/linkMap";
+import { fetchNews, DEFAULT_NEWS_QUERY } from "@/lib/news";
 
 export const dynamic = "force-dynamic";
 
-const SEVERITY: Record<string, string> = {
-  high: "bg-danger",
-  medium: "bg-warning text-dark",
-  info: "bg-secondary",
-};
-
 export default async function NewsPage() {
-  const [news, lang] = await Promise.all([
-    prisma.surveillanceNews.findMany({ orderBy: [{ order: "asc" }, { isoDate: "desc" }] }),
-    getLang(),
-  ]);
+  let query = DEFAULT_NEWS_QUERY;
+  try {
+    const setting = await prisma.setting.findUnique({ where: { key: "news_query" } });
+    if (setting?.value) query = setting.value;
+  } catch {
+    // use default
+  }
+  const [articles, lang] = await Promise.all([fetchNews(query, 24), getLang()]);
   const t = getT(lang);
+  const locale = lang === "es" ? "es-CL" : "en-GB";
 
   return (
     <>
       <PageHeader title={t.news.title} breadcrumbs={[{ label: t.news.title }]} />
-      <div className="container py-5" style={{ maxWidth: 820 }}>
-        {news.length === 0 ? (
+      <div className="container py-5" style={{ maxWidth: 860 }}>
+        <p className="section-intro">{t.news.intro}</p>
+
+        {articles.length === 0 ? (
           <p className="text-muted">{t.news.empty}</p>
         ) : (
           <div className="d-flex flex-column gap-3">
-            {news.map((n) => (
-              <Link
-                key={n.id}
-                href={mapLink(n.link)}
+            {articles.map((a, i) => (
+              <a
+                key={i}
+                href={a.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-decoration-none clean-card card shadow-sm"
               >
                 <div className="card-body">
-                  <div className="d-flex align-items-center gap-2 mb-1">
-                    <span className="small text-muted">{n.dateLabel}</span>
-                    <span className={`badge ${SEVERITY[n.severity] ?? "bg-secondary"}`}>
-                      {n.severity}
-                    </span>
+                  <div className="d-flex flex-wrap align-items-center gap-2 mb-1">
+                    {a.source && <span className="badge bg-light text-dark border">{a.source}</span>}
+                    {a.isoDate && (
+                      <span className="small text-muted">
+                        {new Date(a.isoDate).toLocaleDateString(locale, {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    )}
                   </div>
-                  <h3 className="h6 text-dark mb-1">{pick(n, lang, "title")}</h3>
-                  <p className="small text-muted mb-0">{pick(n, lang, "summary")}</p>
+                  <h3 className="h6 text-dark mb-0">
+                    {a.title}
+                    <i className="bi bi-box-arrow-up-right ms-2 small text-muted"></i>
+                  </h3>
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         )}
+
+        <p className="small text-muted mt-4">{t.news.sourceNote}</p>
       </div>
     </>
   );
