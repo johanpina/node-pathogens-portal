@@ -59,36 +59,51 @@ async function main() {
     {
       slug: "respiratory-viruses",
       name: "Virus respiratorios",
+      nameEn: "Respiratory viruses",
       description:
         "Vigilancia y datos genómicos de influenza, SARS-CoV-2, VRS y otros patógenos respiratorios circulantes en Chile.",
+      descriptionEn:
+        "Surveillance and genomic data on influenza, SARS-CoV-2, RSV and other respiratory pathogens circulating in Chile.",
       menuOrder: 1,
     },
     {
       slug: "vector-borne-diseases",
       name: "Enfermedades transmitidas por vectores",
+      nameEn: "Vector-borne diseases",
       description:
         "Datos epidemiológicos y entomológicos de dengue, hantavirus y otros patógenos transmitidos por vectores.",
+      descriptionEn:
+        "Epidemiological and entomological data on dengue, hantavirus and other vector-borne pathogens.",
       menuOrder: 2,
     },
     {
       slug: "antimicrobial-resistance",
       name: "Resistencia antimicrobiana",
+      nameEn: "Antimicrobial resistance",
       description:
         "Monitoreo nacional de RAM: perfiles de resistencia, tendencias por región y caracterización genómica.",
+      descriptionEn:
+        "National AMR monitoring: resistance profiles, regional trends and genomic characterisation.",
       menuOrder: 3,
     },
     {
       slug: "foodborne-pathogens",
       name: "Patógenos transmitidos por alimentos",
+      nameEn: "Foodborne pathogens",
       description:
         "Datos sobre Salmonella y otros organismos relevantes para la inocuidad alimentaria detectados en vigilancia nacional.",
+      descriptionEn:
+        "Data on Salmonella and other organisms relevant to food safety detected through national surveillance.",
       menuOrder: 4,
     },
     {
       slug: "emerging-pathogens",
       name: "Patógenos emergentes",
+      nameEn: "Emerging pathogens",
       description:
         "Señales tempranas y datos genómicos de patógenos nuevos o re-emergentes con impacto potencial en Chile.",
+      descriptionEn:
+        "Early signals and genomic data on novel or re-emerging pathogens with potential impact in Chile.",
       menuOrder: 5,
     },
   ];
@@ -96,7 +111,13 @@ async function main() {
   for (const t of topicData) {
     await prisma.topic.upsert({
       where: { slug: t.slug },
-      update: { name: t.name, description: t.description, menuOrder: t.menuOrder },
+      update: {
+        name: t.name,
+        nameEn: t.nameEn,
+        description: t.description,
+        descriptionEn: t.descriptionEn,
+        menuOrder: t.menuOrder,
+      },
       create: t,
     });
   }

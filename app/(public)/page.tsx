@@ -4,7 +4,7 @@ import PathogenCard from "@/components/cards/PathogenCard";
 import HomeAlertBanner from "@/components/public/HomeAlertBanner";
 import { getLang } from "@/lib/getLang";
 import { getT, type Lang } from "@/lib/i18n";
-import { pick } from "@/lib/pickLang";
+import { pick, pickField } from "@/lib/pickLang";
 import { mapLink } from "@/lib/surveillance/linkMap";
 import { fetchNews, DEFAULT_NEWS_QUERY, DEFAULT_NEWS_QUERY_EN } from "@/lib/news";
 
@@ -154,7 +154,7 @@ export default async function HomePage() {
                       <Link href={`/topics/${topic.slug}`} className="text-decoration-none">
                         <div className="topic-tile">
                           <i className="bi bi-diagram-3 me-2"></i>
-                          {topic.name}
+                          {pickField(topic.name, topic.nameEn, lang)}
                         </div>
                       </Link>
                     </div>

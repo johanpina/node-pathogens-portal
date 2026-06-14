@@ -58,8 +58,10 @@ model Highlight {
 model Topic {
   id            String           @id @default(cuid())
   name          String
+  nameEn        String?
   slug          String           @unique
   description   String?
+  descriptionEn String?
   banner        String?
   bannerCaption String?
   menuOrder     Int              @default(0)

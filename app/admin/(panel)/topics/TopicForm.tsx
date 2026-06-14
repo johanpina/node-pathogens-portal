@@ -7,7 +7,9 @@ import ImageUpload from "@/components/admin/ImageUpload";
 interface TopicData {
   id?: string;
   name?: string;
+  nameEn?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   menuOrder?: number;
   banner?: string | null;
   bannerCaption?: string | null;
@@ -18,7 +20,9 @@ export default function TopicForm({ initialData }: { initialData?: TopicData }) 
   const isEdit = !!initialData?.id;
 
   const [name, setName] = useState(initialData?.name ?? "");
+  const [nameEn, setNameEn] = useState(initialData?.nameEn ?? "");
   const [description, setDescription] = useState(initialData?.description ?? "");
+  const [descriptionEn, setDescriptionEn] = useState(initialData?.descriptionEn ?? "");
   const [menuOrder, setMenuOrder] = useState(initialData?.menuOrder ?? 0);
   const [banner, setBanner] = useState(initialData?.banner ?? "");
   const [bannerCaption, setBannerCaption] = useState(initialData?.bannerCaption ?? "");
@@ -30,7 +34,7 @@ export default function TopicForm({ initialData }: { initialData?: TopicData }) 
     setError("");
     setLoading(true);
 
-    const payload = { name, description, menuOrder, banner, bannerCaption };
+    const payload = { name, nameEn, description, descriptionEn, menuOrder, banner, bannerCaption };
 
     const url = isEdit ? `/api/topics/${initialData!.id}` : "/api/topics";
     const method = isEdit ? "PUT" : "POST";
@@ -61,14 +65,24 @@ export default function TopicForm({ initialData }: { initialData?: TopicData }) 
       )}
 
       <div className="row g-3 mb-3">
-        <div className="col-md-8">
-          <label className="form-label fw-semibold">Nombre *</label>
+        <div className="col-md-6">
+          <label className="form-label fw-semibold">Nombre (ES) *</label>
           <input
             type="text"
             className="form-control"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+          />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label fw-semibold">Name (EN)</label>
+          <input
+            type="text"
+            className="form-control"
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+            placeholder="English name (optional)"
           />
         </div>
         <div className="col-md-4">
@@ -83,15 +97,27 @@ export default function TopicForm({ initialData }: { initialData?: TopicData }) 
         </div>
       </div>
 
-      <div className="mb-3">
-        <label className="form-label fw-semibold">Descripción</label>
-        <textarea
-          className="form-control"
-          rows={3}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Descripción del tema"
-        />
+      <div className="row g-3 mb-3">
+        <div className="col-md-6">
+          <label className="form-label fw-semibold">Descripción (ES)</label>
+          <textarea
+            className="form-control"
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Descripción del tema"
+          />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label fw-semibold">Description (EN)</label>
+          <textarea
+            className="form-control"
+            rows={3}
+            value={descriptionEn}
+            onChange={(e) => setDescriptionEn(e.target.value)}
+            placeholder="English description (optional)"
+          />
+        </div>
       </div>
 
       <div className="mb-3">

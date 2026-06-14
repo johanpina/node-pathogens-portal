@@ -5,7 +5,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import PathogenCard from "@/components/cards/PathogenCard";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
-import { pick } from "@/lib/pickLang";
+import { pick, pickField } from "@/lib/pickLang";
 
 export const dynamic = "force-dynamic";
 
@@ -30,20 +30,22 @@ export default async function TopicPage({
 
   if (!topic) notFound();
   const t = getT(lang);
+  const topicName = pickField(topic.name, topic.nameEn, lang);
+  const topicDesc = pickField(topic.description, topic.descriptionEn, lang);
 
   return (
     <>
       <PageHeader
-        title={topic.name}
+        title={topicName}
         breadcrumbs={[
           { label: t.topicDetail.topicsNav, href: "/topics" },
-          { label: topic.name },
+          { label: topicName },
         ]}
       />
       <div className="container py-5">
-        {topic.description && (
+        {topicDesc && (
           <p className="lead text-muted mb-4" style={{ maxWidth: 760 }}>
-            {topic.description}
+            {topicDesc}
           </p>
         )}
 

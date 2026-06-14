@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   if (isNextResponse(auth)) return auth;
 
   const body = await request.json();
-  const { name, description, banner, bannerCaption, menuOrder } = body;
+  const { name, nameEn, description, descriptionEn, banner, bannerCaption, menuOrder } = body;
 
   if (!name) {
     return NextResponse.json({ error: "Nombre requerido" }, { status: 400 });
@@ -30,8 +30,10 @@ export async function POST(request: NextRequest) {
     const topic = await prisma.topic.create({
       data: {
         name,
+        nameEn: nameEn || null,
         slug,
         description: description || null,
+        descriptionEn: descriptionEn || null,
         banner: banner || null,
         bannerCaption: bannerCaption || null,
         menuOrder: menuOrder ?? 0,

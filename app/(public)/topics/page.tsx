@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
 import { topicVisual } from "@/lib/topicVisual";
+import { pickField } from "@/lib/pickLang";
 
 export const dynamic = "force-dynamic";
 
@@ -37,9 +38,11 @@ export default async function TopicsPage() {
                         <i className={`bi ${v.icon}`}></i>
                       </div>
                       <div className="card-body d-flex flex-column">
-                        <h3 className="h5 text-dark">{topic.name}</h3>
-                        {topic.description && (
-                          <p className="small text-muted flex-grow-1">{topic.description}</p>
+                        <h3 className="h5 text-dark">{pickField(topic.name, topic.nameEn, lang)}</h3>
+                        {(topic.description || topic.descriptionEn) && (
+                          <p className="small text-muted flex-grow-1">
+                            {pickField(topic.description, topic.descriptionEn, lang)}
+                          </p>
                         )}
                         <span className="small text-muted">
                           <i className="bi bi-clipboard-pulse me-1"></i>

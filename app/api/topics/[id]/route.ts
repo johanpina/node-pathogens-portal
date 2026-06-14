@@ -26,7 +26,9 @@ export async function PUT(
     where: { id },
     data: {
       name: body.name,
+      nameEn: body.nameEn ?? null,
       description: body.description ?? null,
+      descriptionEn: body.descriptionEn ?? null,
       banner: body.banner ?? null,
       bannerCaption: body.bannerCaption ?? null,
       menuOrder: body.menuOrder ?? 0,

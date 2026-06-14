@@ -13,3 +13,13 @@ export function pick<T extends Record<string, unknown>>(
   const val = obj[key];
   return typeof val === "string" ? val : "";
 }
+
+/**
+ * Pick between a default (Spanish) field and its English variant, falling back
+ * to the default when the English value is missing. For models like Topic that
+ * store the base language in `name` and the translation in `nameEn`.
+ */
+export function pickField(es: string | null, en: string | null, lang: Lang): string {
+  if (lang === "en") return en || es || "";
+  return es || en || "";
+}
