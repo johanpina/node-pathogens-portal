@@ -2,7 +2,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import { prisma } from "@/lib/db";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
-import { DATA_SECTIONS, dataUrl } from "@/lib/availableData";
+import { DATA_SECTIONS, dataUrl, fetchCount, uniqueDbs } from "@/lib/availableData";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +18,14 @@ export default async function DatasetsPage() {
   }
   const lang = await getLang();
   const t = getT(lang);
+  const locale = lang === "es" ? "es-CL" : "en-US";
+
+  // Live counts per db (cached 6h, fetched in parallel; null when unavailable).
+  const dbs = uniqueDbs();
+  const countList = await Promise.all(dbs.map((db) => fetchCount(db, country)));
+  const counts: Record<string, number | null> = Object.fromEntries(
+    dbs.map((db, i) => [db, countList[i]])
+  );
 
   return (
     <>
@@ -44,18 +52,24 @@ export default async function DatasetsPage() {
               {lang === "es" ? section.titleEs : section.titleEn}
             </h3>
             <div className="d-flex flex-wrap gap-2">
-              {section.links.map((link) => (
-                <a
-                  key={link.db + link.path}
-                  href={dataUrl(link.path, link.db, country)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="data-link-btn"
-                >
-                  {t.datasets.viewIn} {lang === "es" ? link.labelEs : link.labelEn}
-                  <i className="bi bi-box-arrow-up-right ms-2"></i>
-                </a>
-              ))}
+              {section.links.map((link) => {
+                const label = lang === "es" ? link.labelEs : link.labelEn;
+                const count = counts[link.db];
+                return (
+                  <a
+                    key={link.db + link.path}
+                    href={dataUrl(link.path, link.db, country)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="data-link-btn"
+                  >
+                    {count != null
+                      ? `${t.datasets.viewAll} ${count.toLocaleString(locale)} ${t.datasets.resultsIn} ${label}`
+                      : `${t.datasets.viewIn} ${label}`}
+                    <i className="bi bi-box-arrow-up-right ms-2"></i>
+                  </a>
+                );
+              })}
             </div>
           </section>
         ))}

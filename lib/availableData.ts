@@ -58,3 +58,40 @@ export function dataUrl(path: string, db: string, country: string): string {
   const query = encodeURIComponent(`(country:"${country}")`);
   return `${PORTAL_BASE}${path}?db=${db}&query=${query}`;
 }
+
+/**
+ * EBI Search domains for which a direct country-scoped count is meaningful.
+ * The portal-specific aliases (priorityPathogens, sequences, samples) are not
+ * EBI Search domains, so those buttons render without a live count.
+ */
+const COUNTABLE = new Set([
+  "sra-sample",
+  "sra-experiment",
+  "sra-analysis",
+  "embl-pathogen",
+  "genome_assembly",
+]);
+
+/** Live result count from the EBI Search API; null if unavailable. Cached 6h. */
+export async function fetchCount(db: string, country: string): Promise<number | null> {
+  if (!COUNTABLE.has(db)) return null;
+  const url =
+    `https://www.ebi.ac.uk/ebisearch/ws/rest/${db}` +
+    `?query=${encodeURIComponent(`country:"${country}"`)}&size=0&format=json`;
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: 21600 },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { hitCount?: number };
+    return typeof data.hitCount === "number" ? data.hitCount : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Unique set of `db` values across all sections (for batch count fetching). */
+export function uniqueDbs(): string[] {
+  return [...new Set(DATA_SECTIONS.flatMap((s) => s.links.map((l) => l.db)))];
+}

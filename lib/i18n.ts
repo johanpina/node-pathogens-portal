@@ -76,6 +76,8 @@ export const translations = {
       intro:
         "is developed and hosted by EMBL-EBI as a public data repository for infectious diseases and epidemics. The links below run queries for different kinds of data — sequences, samples, analyses and outbreaks — filtered for Chile. Each one opens the corresponding results in the Central Pathogens Portal.",
       viewIn: "View results in",
+      viewAll: "View all",
+      resultsIn: "results in",
     },
     surveillance: {
       navLabel: "Dashboards",
@@ -187,6 +189,8 @@ export const translations = {
       intro:
         "es desarrollado y alojado por EMBL-EBI como repositorio público de datos de enfermedades infecciosas y epidemias. Los enlaces de abajo ejecutan consultas de distintos tipos de datos —secuencias, muestras, análisis y brotes— filtradas para Chile. Cada uno abre los resultados correspondientes en el Central Pathogens Portal.",
       viewIn: "Ver resultados en",
+      viewAll: "Ver",
+      resultsIn: "resultados en",
     },
     surveillance: {
       navLabel: "Tableros",

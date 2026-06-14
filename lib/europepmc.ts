@@ -9,6 +9,14 @@ export interface PMCArticle {
   source: string;
 }
 
+/**
+ * Build a Europe PMC query that requires BOTH the topic phrase and the country
+ * as quoted phrases, e.g. `"pathogen" AND "Chile"`.
+ */
+export function buildPublicationQuery(topic = "pathogen", country = "Chile"): string {
+  return `"${topic}" AND "${country}"`;
+}
+
 export async function fetchPublications(
   query: string,
   pageSize = 10
