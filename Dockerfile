@@ -41,6 +41,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 
+# Seed needs lib/ (imported via the @/ alias) and tsconfig.json (for tsx path
+# resolution) so `prisma db seed` works on a fresh database.
+COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+
 # Startup script
 COPY --chown=nextjs:nodejs scripts/docker-start.sh ./docker-start.sh
 RUN chmod +x ./docker-start.sh
