@@ -42,6 +42,9 @@ export default function Navbar({ lang }: { lang: Lang }) {
             />
           </Link>
 
+          {/* Divider */}
+          <span className="logo-divider d-none d-md-block" aria-hidden="true"></span>
+
           {/* Institution logo */}
           <img
             src="/images/logos/logo_uchile.png"

@@ -50,6 +50,15 @@ a:hover {
   color: var(--portal-primary);
 }
 
+/* Vertical divider between the portal logo and the institution logo */
+.logo-divider {
+  width: 1px;
+  height: 44px;
+  background: #d7dde3;
+  margin: 0 1.25rem 0 0.25rem;
+  flex-shrink: 0;
+}
+
 /* ─── Navbar Main ─── */
 .portal-navbar-main {
   background: #fff;
