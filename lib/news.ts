@@ -4,6 +4,8 @@
  * home "What's New?" sidebar. No API key required.
  */
 
+import type { Lang } from "@/lib/i18n";
+
 export interface NewsArticle {
   title: string;
   link: string;
@@ -13,6 +15,9 @@ export interface NewsArticle {
 
 export const DEFAULT_NEWS_QUERY =
   '(brote OR patógeno OR hantavirus OR dengue OR influenza OR sarampión OR "virus respiratorio") Chile';
+
+export const DEFAULT_NEWS_QUERY_EN =
+  '(outbreak OR pathogen OR hantavirus OR dengue OR influenza OR measles OR "respiratory virus") Chile';
 
 function decodeEntities(s: string): string {
   return s
@@ -31,15 +36,20 @@ function tag(block: string, name: string): string | null {
   return m ? decodeEntities(m[1]) : null;
 }
 
-/** Fetch + parse Google News RSS. Cached 30 min; returns [] on failure. */
+/** Fetch + parse Google News RSS. Locale follows `lang`. Cached 30 min; [] on failure. */
 export async function fetchNews(
   query: string = DEFAULT_NEWS_QUERY,
-  max = 12
+  max = 12,
+  lang: Lang = "es"
 ): Promise<NewsArticle[]> {
+  const loc =
+    lang === "en"
+      ? { hl: "en-US", gl: "US", ceid: "US:en" }
+      : { hl: "es-419", gl: "CL", ceid: "CL:es" };
   const url =
     "https://news.google.com/rss/search?q=" +
     encodeURIComponent(query) +
-    "&hl=es-419&gl=CL&ceid=CL:es";
+    `&hl=${loc.hl}&gl=${loc.gl}&ceid=${loc.ceid}`;
   try {
     const res = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; PathogenPortal/1.0)" },

@@ -41,7 +41,7 @@ export default async function PublicationsPage() {
             </>
           )}
         </p>
-        <Publications query={query} />
+        <Publications query={query} lang={lang} />
       </div>
     </>
   );

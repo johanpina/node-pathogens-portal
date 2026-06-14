@@ -39,6 +39,34 @@ export const translations = {
       sourceNote: "Headlines aggregated from Google News. Each link opens the original source.",
       empty: "No news available right now.",
     },
+    about: {
+      title: "About",
+      introBefore:
+        "This portal is part of the international network of pathogen portals coordinated by the ",
+      introAfter:
+        ". Our mission is to make open data on pathogens in Chile easy to access, fostering collaborative, reproducible science.",
+      resourcesTitle: "Resources",
+      resHighlights: "Scientific highlights",
+      resDashboards: "Dashboards and visualizations",
+      resPublications: "Publications (Europe PMC)",
+      resDatasets: "Datasets (EMBL-EBI)",
+    },
+    contact: {
+      title: "Contact",
+      heading: "Contact us",
+      intro:
+        "For questions, collaborations or more information about the portal, feel free to reach out.",
+      notConfigured: "Contact email not configured.",
+      configure: "Configure in Admin",
+    },
+    publications: {
+      loading: "Loading publications…",
+      error: "Error loading publications",
+      empty: "No publications found.",
+      prev: "Previous",
+      next: "Next",
+      page: "Page",
+    },
     highlights: {
       title: "Data Highlights",
       filter: "Filter by topic:",
@@ -159,6 +187,34 @@ export const translations = {
       intro: "Noticias recientes sobre patógenos, brotes y salud pública en Chile.",
       sourceNote: "Titulares agregados desde Google Noticias. Cada enlace abre la fuente original.",
       empty: "No hay noticias disponibles en este momento.",
+    },
+    about: {
+      title: "Acerca de",
+      introBefore:
+        "Este portal forma parte de la red internacional de portales de patógenos coordinada por el ",
+      introAfter:
+        ". Nuestra misión es facilitar el acceso a datos abiertos sobre patógenos en Chile, promoviendo la ciencia colaborativa y reproducible.",
+      resourcesTitle: "Recursos",
+      resHighlights: "Destacados científicos",
+      resDashboards: "Dashboards y visualizaciones",
+      resPublications: "Publicaciones (Europe PMC)",
+      resDatasets: "Datasets (EMBL-EBI)",
+    },
+    contact: {
+      title: "Contacto",
+      heading: "Contáctanos",
+      intro:
+        "Para consultas, colaboraciones o más información sobre el portal, no dudes en escribirnos.",
+      notConfigured: "Email de contacto no configurado.",
+      configure: "Configurar en Admin",
+    },
+    publications: {
+      loading: "Cargando publicaciones…",
+      error: "Error al cargar publicaciones",
+      empty: "No se encontraron publicaciones.",
+      prev: "Anterior",
+      next: "Siguiente",
+      page: "Página",
     },
     highlights: {
       title: "Destacados",

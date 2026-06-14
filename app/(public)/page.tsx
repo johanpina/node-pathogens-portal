@@ -3,14 +3,14 @@ import Link from "next/link";
 import PathogenCard from "@/components/cards/PathogenCard";
 import HomeAlertBanner from "@/components/public/HomeAlertBanner";
 import { getLang } from "@/lib/getLang";
-import { getT } from "@/lib/i18n";
+import { getT, type Lang } from "@/lib/i18n";
 import { pick } from "@/lib/pickLang";
 import { mapLink } from "@/lib/surveillance/linkMap";
-import { fetchNews, DEFAULT_NEWS_QUERY } from "@/lib/news";
+import { fetchNews, DEFAULT_NEWS_QUERY, DEFAULT_NEWS_QUERY_EN } from "@/lib/news";
 
 export const dynamic = "force-dynamic";
 
-async function getHomeData() {
+async function getHomeData(lang: Lang) {
   const [pathogens, highlights, topics, settings, epiMeta, bannerStats] =
     await Promise.all([
       prisma.pathogen.findMany({
@@ -26,13 +26,16 @@ async function getHomeData() {
       prisma.bannerStat.findMany({ orderBy: { order: "asc" } }),
     ]);
   const settingsMap = Object.fromEntries(settings.map((s) => [s.key, s.value]));
-  const news = await fetchNews(settingsMap.news_query || DEFAULT_NEWS_QUERY, 5);
+  const query =
+    lang === "en" ? DEFAULT_NEWS_QUERY_EN : settingsMap.news_query || DEFAULT_NEWS_QUERY;
+  const news = await fetchNews(query, 5, lang);
   return { pathogens, highlights, topics, news, settings: settingsMap, epiMeta, bannerStats };
 }
 
 export default async function HomePage() {
-  const [{ pathogens, highlights, topics, news, settings, epiMeta, bannerStats }, lang] =
-    await Promise.all([getHomeData(), getLang()]);
+  const lang = await getLang();
+  const { pathogens, highlights, topics, news, settings, epiMeta, bannerStats } =
+    await getHomeData(lang);
   const t = getT(lang);
 
   return (

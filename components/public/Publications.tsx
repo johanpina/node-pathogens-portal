@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getT, type Lang } from "@/lib/i18n";
 
 interface Article {
   id: string;
@@ -14,6 +15,7 @@ interface Article {
 
 interface PublicationsProps {
   query?: string;
+  lang?: Lang;
 }
 
 /** Europe PMC titles contain entity-encoded HTML (e.g. &lt;i&gt;). Decode and strip tags. */
@@ -27,7 +29,8 @@ function cleanTitle(raw: string): string {
   return decoded.replace(/<[^>]+>/g, "").trim();
 }
 
-export default function Publications({ query = "pathogen" }: PublicationsProps) {
+export default function Publications({ query = "pathogen", lang = "en" }: PublicationsProps) {
+  const tp = getT(lang).publications;
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -44,16 +47,16 @@ export default function Publications({ query = "pathogen" }: PublicationsProps) 
         setLoading(false);
       })
       .catch(() => {
-        setError("Error al cargar publicaciones");
+        setError(tp.error);
         setLoading(false);
       });
-  }, [query, page]);
+  }, [query, page, tp.error]);
 
   if (loading) {
     return (
       <div className="text-center py-5">
         <div className="spinner-border text-primary"></div>
-        <p className="mt-2 text-muted">Cargando publicaciones...</p>
+        <p className="mt-2 text-muted">{tp.loading}</p>
       </div>
     );
   }
@@ -65,7 +68,7 @@ export default function Publications({ query = "pathogen" }: PublicationsProps) 
   return (
     <div>
       {articles.length === 0 ? (
-        <p className="text-muted">No se encontraron publicaciones.</p>
+        <p className="text-muted">{tp.empty}</p>
       ) : (
         <div className="list-group">
           {articles.map((article) => (
@@ -120,15 +123,15 @@ export default function Publications({ query = "pathogen" }: PublicationsProps) 
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1 || loading}
         >
-          <i className="bi bi-chevron-left"></i> Anterior
+          <i className="bi bi-chevron-left"></i> {tp.prev}
         </button>
-        <span className="btn btn-light btn-sm disabled">Página {page}</span>
+        <span className="btn btn-light btn-sm disabled">{tp.page} {page}</span>
         <button
           className="btn btn-outline-secondary btn-sm"
           onClick={() => setPage((p) => p + 1)}
           disabled={articles.length < 10 || loading}
         >
-          Siguiente <i className="bi bi-chevron-right"></i>
+          {tp.next} <i className="bi bi-chevron-right"></i>
         </button>
       </div>
     </div>

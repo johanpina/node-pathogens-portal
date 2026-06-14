@@ -2,19 +2,22 @@ import PageHeader from "@/components/layout/PageHeader";
 import { prisma } from "@/lib/db";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
-import { fetchNews, DEFAULT_NEWS_QUERY } from "@/lib/news";
+import { fetchNews, DEFAULT_NEWS_QUERY, DEFAULT_NEWS_QUERY_EN } from "@/lib/news";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewsPage() {
-  let query = DEFAULT_NEWS_QUERY;
-  try {
-    const setting = await prisma.setting.findUnique({ where: { key: "news_query" } });
-    if (setting?.value) query = setting.value;
-  } catch {
-    // use default
+  const lang = await getLang();
+  let query = lang === "en" ? DEFAULT_NEWS_QUERY_EN : DEFAULT_NEWS_QUERY;
+  if (lang === "es") {
+    try {
+      const setting = await prisma.setting.findUnique({ where: { key: "news_query" } });
+      if (setting?.value) query = setting.value;
+    } catch {
+      // use default
+    }
   }
-  const [articles, lang] = await Promise.all([fetchNews(query, 24), getLang()]);
+  const articles = await fetchNews(query, 24, lang);
   const t = getT(lang);
   const locale = lang === "es" ? "es-CL" : "en-GB";
 
