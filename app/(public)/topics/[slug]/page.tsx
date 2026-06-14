@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import PageHeader from "@/components/layout/PageHeader";
-import HighlightCard from "@/components/cards/HighlightCard";
-import DashboardCard from "@/components/cards/DashboardCard";
+import PathogenCard from "@/components/cards/PathogenCard";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
+import { pick } from "@/lib/pickLang";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +19,9 @@ export default async function TopicPage({
     prisma.topic.findUnique({
       where: { slug },
       include: {
-        highlights: {
-          include: { highlight: true },
-          where: { highlight: { published: true } },
-          orderBy: { highlight: { date: "desc" } },
-        },
-        dashboards: {
-          include: { dashboard: true },
-          where: { dashboard: { published: true } },
+        pathogens: {
+          orderBy: { order: "asc" },
+          include: { stats: { where: { kind: "card" }, orderBy: { order: "asc" } } },
         },
       },
     }),
@@ -39,8 +35,6 @@ export default async function TopicPage({
     <>
       <PageHeader
         title={topic.name}
-        banner={topic.banner}
-        bannerCaption={topic.bannerCaption}
         breadcrumbs={[
           { label: t.topicDetail.topicsNav, href: "/topics" },
           { label: topic.name },
@@ -48,32 +42,41 @@ export default async function TopicPage({
       />
       <div className="container py-5">
         {topic.description && (
-          <p className="lead text-muted mb-5">{topic.description}</p>
+          <p className="lead text-muted mb-4" style={{ maxWidth: 760 }}>
+            {topic.description}
+          </p>
         )}
 
-        {topic.highlights.length > 0 && (
-          <section className="mb-5">
-            <h3 className="section-title">{t.topicDetail.highlightsLabel}</h3>
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-              {topic.highlights.map(({ highlight }) => (
-                <HighlightCard key={highlight.id} {...highlight} tags={highlight.tags} />
+        <div className="d-flex flex-wrap gap-2 mb-5">
+          <Link href="/surveillance" className="btn btn-outline-primary btn-sm">
+            <i className="bi bi-graph-up me-1"></i> {t.topicDetail.exploreDashboards}
+          </Link>
+          <Link href="/datasets" className="btn btn-outline-secondary btn-sm">
+            <i className="bi bi-database me-1"></i> {t.topicDetail.exploreData}
+          </Link>
+        </div>
+
+        {topic.pathogens.length > 0 ? (
+          <section>
+            <h2 className="section-title mb-3">{t.topicDetail.pathogensTitle}</h2>
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+              {topic.pathogens.map((p) => (
+                <PathogenCard
+                  key={p.id}
+                  id={p.id}
+                  name={pick(p, lang, "name")}
+                  status={p.status}
+                  statusLabel={pick(p, lang, "statusLabel")}
+                  icon={p.icon}
+                  color={p.color}
+                  summary={pick(p, lang, "summary")}
+                  stats={p.stats.map((s) => ({ value: s.value, label: pick(s, lang, "label") }))}
+                  detailLabel={t.surveillance.viewDetail}
+                />
               ))}
             </div>
           </section>
-        )}
-
-        {topic.dashboards.length > 0 && (
-          <section className="mb-5">
-            <h3 className="section-title">{t.topicDetail.dashboardsLabel}</h3>
-            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-              {topic.dashboards.map(({ dashboard }) => (
-                <DashboardCard key={dashboard.id} {...dashboard} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {topic.highlights.length === 0 && topic.dashboards.length === 0 && (
+        ) : (
           <p className="text-muted">{t.topicDetail.empty}</p>
         )}
       </div>

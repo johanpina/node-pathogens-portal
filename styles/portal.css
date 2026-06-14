@@ -285,6 +285,19 @@ a:hover {
   opacity: 0.8;
 }
 
+/* ─── Topic card header (icon thumbnail) ─── */
+.topic-card-head {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.topic-card-head .bi {
+  font-size: 2.4rem;
+  opacity: 0.95;
+}
+
 /* ─── Topic tile ─── */
 .topic-tile {
   background: #fff;

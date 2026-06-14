@@ -58,6 +58,9 @@ export const translations = {
     },
     topics: {
       title: "Topics",
+      intro:
+        "The Chile Pathogen Portal brings together datasets, resources and tools related to priority pathogens in Chile. Browse a topic to explore the pathogens monitored within it and their surveillance data.",
+      pathogens: "pathogens",
       highlights: "highlights",
       dashboards: "dashboards",
       empty: "No topics created yet.",
@@ -67,7 +70,10 @@ export const translations = {
       highlightsLabel: "Highlights",
       highlightsNav: "Highlights",
       dashboardsLabel: "Dashboards",
-      empty: "No content for this topic yet.",
+      pathogensTitle: "Pathogens under surveillance",
+      exploreDashboards: "View all dashboards",
+      exploreData: "Available data for Chile",
+      empty: "No pathogens linked to this topic yet.",
     },
     datasets: {
       title: "Available datasets",
@@ -171,6 +177,9 @@ export const translations = {
     },
     topics: {
       title: "Tópicos",
+      intro:
+        "El Portal de Patógenos Chile reúne datasets, recursos y herramientas sobre los patógenos prioritarios en Chile. Explora un tópico para ver los patógenos que vigila y sus datos de vigilancia.",
+      pathogens: "patógenos",
       highlights: "destacados",
       dashboards: "dashboards",
       empty: "No hay tópicos creados aún.",
@@ -180,7 +189,10 @@ export const translations = {
       highlightsLabel: "Destacados",
       highlightsNav: "Destacados",
       dashboardsLabel: "Dashboards",
-      empty: "No hay contenido para este tópico aún.",
+      pathogensTitle: "Patógenos en vigilancia",
+      exploreDashboards: "Ver todos los tableros",
+      exploreData: "Datos disponibles para Chile",
+      empty: "Aún no hay patógenos vinculados a este tópico.",
     },
     datasets: {
       title: "Datasets disponibles",
