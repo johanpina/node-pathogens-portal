@@ -3,6 +3,13 @@
 import { Chart } from "react-chartjs-2";
 import {
   Chart as ChartJS,
+  // Controllers — required when using the generic <Chart type="..."> component
+  // (the type-specific <Line>/<Bar> components register these automatically).
+  LineController,
+  BarController,
+  DoughnutController,
+  PieController,
+  // Scales + elements
   CategoryScale,
   LinearScale,
   PointElement,
@@ -16,6 +23,10 @@ import {
 import type { ChartType } from "chart.js";
 
 ChartJS.register(
+  LineController,
+  BarController,
+  DoughnutController,
+  PieController,
   CategoryScale,
   LinearScale,
   PointElement,
