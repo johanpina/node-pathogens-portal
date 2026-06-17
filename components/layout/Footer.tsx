@@ -36,7 +36,7 @@ export default async function Footer() {
           <img
             src="/images/logos/logo_chair.png"
             alt="CHAIR – Center for HIV/AIDS Integral Research"
-            style={{ height: 60, width: "auto" }}
+            style={{ height: 76, width: "auto" }}
           />
           <img
             src="/images/logos/logo_facicqf.png"
