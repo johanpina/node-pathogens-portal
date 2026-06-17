@@ -1,5 +1,5 @@
 import PageHeader from "@/components/layout/PageHeader";
-import { prisma } from "@/lib/db";
+import ContactForm from "@/components/public/ContactForm";
 import { getLang } from "@/lib/getLang";
 import { getT } from "@/lib/i18n";
 
@@ -7,14 +7,10 @@ export const dynamic = "force-dynamic";
 
 export const metadata = { title: "Contacto — Portal de Patógenos" };
 
+// Messages from the contact form are routed to the bioinformatics team.
+const CONTACT_TO = "bioinformatica@ciq.uchile.cl";
+
 export default async function ContactPage() {
-  let contactEmail = "";
-  try {
-    const setting = await prisma.setting.findUnique({ where: { key: "contact_email" } });
-    if (setting?.value) contactEmail = setting.value;
-  } catch {
-    // use default
-  }
   const lang = await getLang();
   const t = getT(lang);
 
@@ -23,22 +19,19 @@ export default async function ContactPage() {
       <PageHeader title={t.contact.title} breadcrumbs={[{ label: t.contact.title }]} />
       <div className="container py-5">
         <div className="row justify-content-center">
-          <div className="col-lg-6">
+          <div className="col-lg-7">
             <div className="card border-0 shadow-sm">
-              <div className="card-body p-4">
-                <h4 className="text-portal-primary mb-3">{t.contact.heading}</h4>
+              <div className="card-body p-4 p-md-5">
+                <h4 className="text-portal-primary mb-2">{t.contact.heading}</h4>
                 <p className="text-muted">{t.contact.intro}</p>
-                {contactEmail ? (
-                  <a href={`mailto:${contactEmail}`} className="btn btn-blue btn-lg mt-2">
-                    <i className="bi bi-envelope me-2"></i>
-                    {contactEmail}
-                  </a>
-                ) : (
-                  <p className="text-muted small">
-                    {t.contact.notConfigured}{" "}
-                    <a href="/admin/settings">{t.contact.configure}</a>
-                  </p>
-                )}
+
+                <ContactForm to={CONTACT_TO} lang={lang} />
+
+                <hr className="my-4" />
+                <p className="text-muted small mb-0">
+                  {t.contact.orWriteTo}{" "}
+                  <a href={`mailto:${CONTACT_TO}`}>{CONTACT_TO}</a>.
+                </p>
               </div>
             </div>
           </div>
