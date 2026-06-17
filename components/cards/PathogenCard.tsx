@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MosquitoIcon from "@/components/surveillance/MosquitoIcon";
 
 export interface PathogenCardStat {
   value: string;
@@ -39,7 +40,11 @@ export default function PathogenCard({
         >
           <div className="card-body d-flex flex-column">
             <div className="d-flex align-items-center mb-2">
-              <i className={`bi ${icon} fs-3 me-2`} style={{ color }}></i>
+              {id === "dengue" || icon === "mosquito" ? (
+                <MosquitoIcon color={color} size={28} className="me-2" />
+              ) : (
+                <i className={`bi ${icon} fs-3 me-2`} style={{ color }}></i>
+              )}
               <h3 className="h6 mb-0 flex-grow-1 text-dark">{name}</h3>
               <span
                 className="badge rounded-pill"
