@@ -138,7 +138,7 @@ export const translations = {
       contactFeedback: "Contact & Feedback",
       sectionConnect: "CONNECT",
       legal1:
-        "Chile Pathogen Portal is supported by the Pathogen Data Network (PDN) and national collaborators.",
+        "The Chile Pathogen Portal is supported by the Pathogen Data Network (PDN), by the FONDAP initiative of the National Agency for Research and Development - ANID (15130011 and 1523A0008) and by the ICAI Platform of Universidad de Chile (FIU-13830).",
       legal2: "Content is licensed under",
       legal3: "Code is licensed under",
     },
@@ -287,7 +287,7 @@ export const translations = {
       contactFeedback: "Contacto & Feedback",
       sectionConnect: "CONECTAR",
       legal1:
-        "Portal de Patógenos Chile es apoyado por la red Pathogen Data Network (PDN) y colaboradores nacionales.",
+        "Portal de Patógenos Chile es apoyado por la red Pathogen Data Network (PDN), por la iniciativa FONDAP de la Agencia Nacional de Investigación y Desarrollo - ANID (15130011 y 1523A0008) y por la Plataforma ICAI Universidad de Chile (FIU-13830).",
       legal2: "El contenido está bajo licencia",
       legal3: "El código está bajo licencia",
     },

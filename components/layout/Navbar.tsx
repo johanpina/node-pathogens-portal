@@ -36,9 +36,9 @@ export default function Navbar({ lang }: { lang: Lang }) {
           {/* Logo Pathogens */}
           <Link href="/" className="d-flex align-items-center me-3 text-decoration-none">
             <img
-              src="/img/pathogens_logo.svg"
-              alt="Pathogens Portal"
-              style={{ height: 50, width: "auto" }}
+              src="/img/pathogens_chile_logo.png"
+              alt="Portal de Patógenos Chile"
+              style={{ height: 46, width: "auto" }}
             />
           </Link>
 
